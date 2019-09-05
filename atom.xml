@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://onekingcc.github.io/"/>
-  <updated>2019-08-27T08:47:40.084Z</updated>
+  <updated>2019-09-05T06:38:33.639Z</updated>
   <id>http://onekingcc.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Abusing  URL Parsers</title>
+    <link href="http://onekingcc.github.io/2019/09/05/Abusing%20%20URL%20Parsers/"/>
+    <id>http://onekingcc.github.io/2019/09/05/Abusing  URL Parsers/</id>
+    <published>2019-09-05T06:33:43.099Z</published>
+    <updated>2019-09-05T06:38:33.639Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Abusing-URL-Parsers"><a href="#Abusing-URL-Parsers" class="headerlink" title="Abusing  URL Parsers"></a>Abusing  URL Parsers</h2><p>本文是基于作者：<strong>Orange</strong>的ppt的一些理解并记录下来，如有理解不当，还望斧正</p><p>原文地址：<a href="https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf" target="_blank" rel="noopener">https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf</a></p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$url = <span class="string">'http://'</span> . $_GET[url];</span><br><span class="line">$parsed = parse_url($url);</span><br><span class="line"><span class="keyword">if</span> ( $parsed[port] == <span class="number">80</span> &amp;&amp; $parsed[host] == <span class="string">'google.com'</span>) &#123;</span><br><span class="line">readfile($url);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">'You Shall Not Pass'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>这里对传入的url进行解析，port如果为80端口,host为googel.com,然后就会执行readfile()这里的readfile()就可以用来实现ssrf攻击，这里要知道parse_url()是如何解析的。</p><p>官方说的parse_url函数解析的是一个 URL ，返回的是一个数组，包含在 URL 中出现的各种组成部分。这个函数<em>不是</em>用来验证给定 URL 的合法性的，只是将其分解为下面列出的部分。不完整的 URL 也被接受，<strong>parse_url()</strong>会尝试尽量正确地将其解析。</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$url = <span class="string">'http://username:password@hostname/path?arg=value#anchor'</span>;</span><br><span class="line"></span><br><span class="line">print_r(parse_url($url));</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> parse_url($url, PHP_URL_PATH);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure><p>output:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Array ( [scheme] =&gt; http [host] =&gt; hostname [user] =&gt; username [pass] =&gt; password [path] =&gt; /path [query] =&gt; arg=value [fragment] =&gt; anchor ) /path</span><br></pre></td></tr></table></figure><p><strong>scheme：代表访问的协议，一般为http或者https以及ftp</strong></p><p><strong>host：主机名，域名，比如：<a href="http://www.google.com。" target="_blank" rel="noopener">www.google.com。</a></strong></p><p><strong>user</strong>：<strong>用户</strong></p><p><strong>port</strong>：<strong>端口号</strong></p><p><strong>path</strong>：<strong>查找路径</strong></p><p><strong>query-string：查询字符串</strong></p><p><strong>anchor：锚点，后台一般不用管，前端用来做页面的定位的。</strong></p><p>当对本文的第一个php传入的url格式为：<a href="http://127.0.0.1:11211:80,对调用readfile()函数的时候解析的是11211端口而在PHP" target="_blank" rel="noopener">http://127.0.0.1:11211:80,对调用readfile()函数的时候解析的是11211端口而在PHP</a> 中的parse_url解析的是80 端口，这里就由于URL解析器跟url解析产生的差异造成ssrf利用。里面有张图说明的很清楚</p><p><img src="/images/urlparser/1567663898650.png" alt="1567663898650"></p><p>在文中还引入了FRC3986</p><p>RFC3986文档规定，Url中只允许包含以下四种：</p><p>​                   1、英文字母（a-zA-Z）</p><p>​                   2、数字（0-9）</p><p>​                   3、-_.~ 4个特殊字符</p><p>​                   4、所有保留字符，RFC3986中指定了以下字符为保留字符（英文字符）：     ! * ‘ ( ) ; : @ &amp; = + $ , / ? # [ ]</p><p><img src="/images/urlparser/1567664365902.png" alt="1567664365902"></p><p>这里如果构造<strong><a href="http://google.com/#@evil.com/" target="_blank" rel="noopener">http://google.com/#@evil.com/</a></strong>在php 中的parse_url解析的是googel.com,而readfile执行的是RFC的定义指向的是evil.com.</p><p><img src="/images/urlparser/1567664693428.png" alt="1567664693428"></p><p><strong>end</strong></p><p>这个ppt里面的内容有点丰富  [滑稽脸]</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;Abusing-URL-Parsers&quot;&gt;&lt;a href=&quot;#Abusing-URL-Parsers&quot; class=&quot;headerlink&quot; title=&quot;Abusing  URL Parsers&quot;&gt;&lt;/a&gt;Abusing  URL Parsers&lt;/h2&gt;&lt;p&gt;
+      
+    
+    </summary>
+    
+      <category term="web安全" scheme="http://onekingcc.github.io/categories/web%E5%AE%89%E5%85%A8/"/>
+    
+    
+      <category term="url" scheme="http://onekingcc.github.io/tags/url/"/>
+    
+  </entry>
   
   <entry>
     <title>XSS Challenge</title>
