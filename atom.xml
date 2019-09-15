@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://onekingcc.github.io/"/>
-  <updated>2019-09-05T06:38:33.639Z</updated>
+  <updated>2019-09-15T09:15:04.555Z</updated>
   <id>http://onekingcc.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>文件上传漏洞</title>
+    <link href="http://onekingcc.github.io/2019/09/15/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/"/>
+    <id>http://onekingcc.github.io/2019/09/15/文件上传漏洞/</id>
+    <published>2019-09-15T09:11:42.463Z</published>
+    <updated>2019-09-15T09:15:04.555Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="文件上传漏洞"><a href="#文件上传漏洞" class="headerlink" title="文件上传漏洞"></a>文件上传漏洞</h2><p>前不久面试的时候面试官问了我一些文件上传，感觉答的不是很好，然后又去重新了解了一下，看了<strong>雨师傅</strong>写的文件上传，真的写的很好，这里我只写下一些基础的东西。 </p><p>在日常的业务场景中文件上传这个功能出现在很多的地方，比如文件上传，图片上传，但是在处理文件上传的时候没有进行过滤，这里的过滤是指的是没有进行任何文件的过滤然后就进行上传</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $file = $_FILES[<span class="string">'file'</span>];</span><br><span class="line">    move_uploaded_file($file[<span class="string">'tmp_name'</span>],$file[<span class="string">'name'</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure><p>这里使用move_uploaded_file()直接把临时上传的文件copy到新的文件中，就会导致任意文件上传，</p><h3 id="常见的绕过技巧"><a href="#常见的绕过技巧" class="headerlink" title="常见的绕过技巧"></a>常见的绕过技巧</h3><h4 id="getimagesize"><a href="#getimagesize" class="headerlink" title="getimagesize"></a>getimagesize</h4><p>比如<code>getimagesize()</code>如果上传的是一个非图片的文件会被提示不是图片文件，但是如果在文件头里面添加“GIF89a”后上传则验证通过,返回图片的尺寸数组。</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    print_r (getimagesize(<span class="string">'2.gif'</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure><p><img src="/images/upload/1568355701285.png" alt="1568355701285"></p><p><img src="/images/upload/1568355859925.png" alt="1568355859925"></p><p>这种绕过的话就直接上传图片的时候在图片后面加上想要执行的php代码就可以绕过。</p><h4 id="00绕过"><a href="#00绕过" class="headerlink" title="00绕过"></a>00绕过</h4><p>00截断即是NULL会被gpc和addslashes函数过滤，要想使用00截断就需要没开起gpc以及没被addslashes过滤，之所以能够使用00截断使因为php是基于C语言开发的%00URL解码后就是C语言的/0，这里新建00.php</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span> <span class="string">"2.txt/000.jpg"</span>;</span><br></pre></td></tr></table></figure><p>测试文件2.txt</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">phpinfo();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure><p>php5.2.x版本解析00.php时会将2.txt/000.jpg解析为2.txt正常执行phpinfo代码</p><p><img src="/images/upload/1568517309671.png" alt="1568517309671"></p><h4 id="字符编码截断"><a href="#字符编码截断" class="headerlink" title="字符编码截断"></a>字符编码截断</h4><p>iconv()函数用来做字符编码转化，这个函数特性当它遇到不能处理的字符串时，后面将不进行处理</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $test = <span class="string">'one'</span>.chr(<span class="number">200</span>).<span class="string">'onekingcc'</span>;</span><br><span class="line">    <span class="keyword">echo</span> $test;</span><br><span class="line">    <span class="keyword">echo</span>  <span class="string">'&lt;br/&gt;'</span>;</span><br><span class="line">    <span class="keyword">echo</span> iconv(<span class="string">"UTF-8"</span>,<span class="string">"gbk"</span>,$test);</span><br><span class="line"><span class="comment">//$test = @iconv("UTF-8","gbk",$test);</span></span><br><span class="line">    <span class="comment">//var_dump($test);</span></span><br></pre></td></tr></table></figure><p>结果如下：</p><p><img src="/images/upload/1568533068549.png" alt="1568533068549"></p><p>测试发现在php版本为5.4.及以上的版本转化字符的时候会返回false</p><p><img src="/images/upload/1568533624373.png" alt="1568533624373"></p><p>这里当使用iconv()函数转化时候从chr(130)之后就没有输出会被截断</p><h3 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h3><ol><li>客户端检测，使用 js 对上传图片检测，包括文件大小、文件扩展名、文件类型等</li><li>服务端检测，对文件大小、文件路径、文件扩展名、文件类型、文件内容检测、对文件重命名等</li><li>其他限制，如服务器端上传目录设置不可执行权限</li><li>检查网站有没有文件解析漏洞和文件包含漏洞</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;文件上传漏洞&quot;&gt;&lt;a href=&quot;#文件上传漏洞&quot; class=&quot;headerlink&quot; title=&quot;文件上传漏洞&quot;&gt;&lt;/a&gt;文件上传漏洞&lt;/h2&gt;&lt;p&gt;前不久面试的时候面试官问了我一些文件上传，感觉答的不是很好，然后又去重新了解了一下，看了&lt;strong&gt;雨师
+      
+    
+    </summary>
+    
+      <category term="web安全" scheme="http://onekingcc.github.io/categories/web%E5%AE%89%E5%85%A8/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Abusing  URL Parsers</title>
