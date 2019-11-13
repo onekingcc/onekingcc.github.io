@@ -94,25 +94,41 @@
 
 
 
-  <meta name="description" content="SQL   INJECTION   LABS之前看先知的时候看到有人发出这个，作者是直接用sqlmap，然后自己也是为了复习所以采用的手工的方式进行注入，自己本地把环境搭了一下然后练习一下sql注入的知识 第一关：是基于错误GET单引号错误类型这里由于知道是MYSQL的数据库所以就不需要对数据库进行判断常规思路首先判断是否有注入这里写入一个单引号发现报错  这里报错的消息可以发现我们注入的消息在单">
+  <meta name="description" content="题目地址：https://ctf.bugku.com/challenges 这里只是做了部分题目还有很多题目没来的及。以后有空在写吧 web2 :这里做一下一些基础题目巩固一下知识web2这里打开链接查看源代码可以直接拿到flag 计算器：这里发现输入的数据只能输入1位 然后审查元素发现maxlength=1这里直接修改代码为3  最后直接拿到flag web基础$_GET 这里进来是可以直接看到">
+<meta name="keywords" content="bugctf">
 <meta property="og:type" content="article">
-<meta property="og:title" content="onekingcc&#39;s Blog">
-<meta property="og:url" content="http://onekingcc.github.io/2019/10/08/SQL INJECTIONS LABS/index.html">
+<meta property="og:title" content="Bugku-ctf">
+<meta property="og:url" content="http://onekingcc.github.io/2019/11/12/Bugku-ctf/index.html">
 <meta property="og:site_name" content="onekingcc&#39;s Blog">
-<meta property="og:description" content="SQL   INJECTION   LABS之前看先知的时候看到有人发出这个，作者是直接用sqlmap，然后自己也是为了复习所以采用的手工的方式进行注入，自己本地把环境搭了一下然后练习一下sql注入的知识 第一关：是基于错误GET单引号错误类型这里由于知道是MYSQL的数据库所以就不需要对数据库进行判断常规思路首先判断是否有注入这里写入一个单引号发现报错  这里报错的消息可以发现我们注入的消息在单">
+<meta property="og:description" content="题目地址：https://ctf.bugku.com/challenges 这里只是做了部分题目还有很多题目没来的及。以后有空在写吧 web2 :这里做一下一些基础题目巩固一下知识web2这里打开链接查看源代码可以直接拿到flag 计算器：这里发现输入的数据只能输入1位 然后审查元素发现maxlength=1这里直接修改代码为3  最后直接拿到flag web基础$_GET 这里进来是可以直接看到">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://onekingcc.github.io/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570502582876.png">
-<meta property="og:image" content="http://onekingcc.github.io/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570502979366.png">
-<meta property="og:image" content="http://onekingcc.github.io/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570505917048.png">
-<meta property="og:image" content="http://onekingcc.github.io/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570506010643.png">
-<meta property="og:image" content="http://onekingcc.github.io/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570506298199.png">
-<meta property="og:image" content="http://onekingcc.github.io/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570506584099.png">
-<meta property="og:image" content="http://onekingcc.github.io/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570506761227.png">
-<meta property="og:updated_time" content="2019-10-08T04:06:55.346Z">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573544169289.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573544431438.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573544492988.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573544632396.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573544935076.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573545095593.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573545396397.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573545504676.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573546075026.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573546350802.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573547153016.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573547462880.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573547933407.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573549220044.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573608043784.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573614095258.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573614232232.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573614380215.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573631026743.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573636642491.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573636497120.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/bugctf/1573636734712.png">
+<meta property="og:updated_time" content="2019-11-13T10:33:50.561Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="onekingcc&#39;s Blog">
-<meta name="twitter:description" content="SQL   INJECTION   LABS之前看先知的时候看到有人发出这个，作者是直接用sqlmap，然后自己也是为了复习所以采用的手工的方式进行注入，自己本地把环境搭了一下然后练习一下sql注入的知识 第一关：是基于错误GET单引号错误类型这里由于知道是MYSQL的数据库所以就不需要对数据库进行判断常规思路首先判断是否有注入这里写入一个单引号发现报错  这里报错的消息可以发现我们注入的消息在单">
-<meta name="twitter:image" content="http://onekingcc.github.io/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570502582876.png">
+<meta name="twitter:title" content="Bugku-ctf">
+<meta name="twitter:description" content="题目地址：https://ctf.bugku.com/challenges 这里只是做了部分题目还有很多题目没来的及。以后有空在写吧 web2 :这里做一下一些基础题目巩固一下知识web2这里打开链接查看源代码可以直接拿到flag 计算器：这里发现输入的数据只能输入1位 然后审查元素发现maxlength=1这里直接修改代码为3  最后直接拿到flag web基础$_GET 这里进来是可以直接看到">
+<meta name="twitter:image" content="http://onekingcc.github.io/images/bugctf/1573544169289.png">
 
 
 
@@ -122,7 +138,7 @@
 
   
   
-  <link rel="canonical" href="http://onekingcc.github.io/2019/10/08/SQL INJECTIONS LABS/">
+  <link rel="canonical" href="http://onekingcc.github.io/2019/11/12/Bugku-ctf/">
 
 
 
@@ -132,7 +148,7 @@
   };
 </script>
 
-  <title> | onekingcc's Blog</title>
+  <title>Bugku-ctf | onekingcc's Blog</title>
   
 
 
@@ -343,7 +359,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://onekingcc.github.io/2019/10/08/SQL INJECTIONS LABS/">
+    <link itemprop="mainEntityOfPage" href="http://onekingcc.github.io/2019/11/12/Bugku-ctf/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="onekingcc">
@@ -360,7 +376,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">Bugku-ctf
 
               
             
@@ -386,7 +402,7 @@
                 
               
 
-              <time title="创建时间：2019-10-08 11:14:01 / 修改时间：12:06:55" itemprop="dateCreated datePublished" datetime="2019-10-08T11:14:01+08:00">2019-10-08</time>
+              <time title="创建时间：2019-11-12 15:43:32" itemprop="dateCreated datePublished" datetime="2019-11-12T15:43:32+08:00">2019-11-12</time>
             </span>
           
 
@@ -394,8 +410,33 @@
             
 
             
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-11-13 18:33:50" itemprop="dateModified" datetime="2019-11-13T18:33:50+08:00">2019-11-13</time>
+              </span>
+            
           
 
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ctf/" itemprop="url" rel="index"><span itemprop="name">ctf</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -428,43 +469,37 @@
       
 
       
-        <h2 id="SQL-INJECTION-LABS"><a href="#SQL-INJECTION-LABS" class="headerlink" title="SQL   INJECTION   LABS"></a>SQL   INJECTION   LABS</h2><p>之前看先知的时候看到有人发出这个，作者是直接用sqlmap，然后自己也是为了复习所以采用的手工的方式进行注入，自己本地把环境搭了一下然后练习一下sql注入的知识</p>
-<h3 id="第一关：是基于错误GET单引号错误类型"><a href="#第一关：是基于错误GET单引号错误类型" class="headerlink" title="第一关：是基于错误GET单引号错误类型"></a>第一关：是基于错误GET单引号错误类型</h3><p>这里由于知道是MYSQL的数据库所以就不需要对数据库进行判断常规思路首先判断是否有注入这里写入一个单引号发现报错</p>
-<p><img src="/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570502582876.png" alt="1570502582876"></p>
-<p>这里报错的消息可以发现我们注入的消息在单引号中间的这里猜想这里sql语句是</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select....from ...where <span class="keyword">id</span> =<span class="string">'1'</span></span><br></pre></td></tr></table></figure>
-
-<p>这里我们知道这里存在注入所以我们在这里猜解这里的显示位这里使用order by语句发现等于3 的时候可以返回正确的结果</p>
-<p><img src="/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570502979366.png" alt="1570502979366"></p>
-<p>接下来就是查看数据库这里使用的是联合查询，通过执行等同于将一个表追加到另一个表的操作来组合两个表的，都知道mysql5.x的版本都提供了information.schema表，记录了数据库中的所有的表，列，库。</p>
-<p>SCHEMATA表：这张表存放了mysql数据库的基本信息包括数据库名。</p>
-<p>TABLES表：这张表存放了mysql表的信息其中包含table_schema,表中的对应的数据库名的信息，table_name不同于tables，就是一个单纯的表名。</p>
-<p>这里还可以使用内置函数爆出数据库为‘security’</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=1' union <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="keyword">database</span>() <span class="comment">--+</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570505917048.png" alt="1570505917048"></p>
-<p>查看当前的登录的用户</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=1' union <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="keyword">user</span>()</span><br></pre></td></tr></table></figure>
-
-<p><img src="/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570506010643.png" alt="1570506010643"></p>
-<p>爆表：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">idid=-1' union <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span> ,<span class="keyword">group_concat</span>(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="keyword">database</span>() <span class="comment">--+</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570506298199.png" alt="1570506298199"></p>
-<p>这里从表名就可以知道用户表是users</p>
-<p>爆列名：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=-1' union <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span> ,<span class="keyword">group_concat</span>(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name=<span class="string">'users'</span><span class="comment">--+</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570506584099.png" alt="1570506584099"></p>
-<p>最后直接爆用户名和密码：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=-1' union <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span> ,<span class="keyword">group_concat</span>(username,<span class="number">0x3a</span>,<span class="keyword">password</span>) <span class="keyword">from</span> <span class="keyword">users</span> <span class="comment">--+</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql%5C1570506761227.png" alt="1570506761227"></p>
-<p>### </p>
-<h3 id="第二关：整型注入"><a href="#第二关：整型注入" class="headerlink" title="第二关：整型注入"></a>第二关：整型注入</h3><p>思路其实都是一样的，整型注入无非就是不用闭合单引号直接可以造成注入。</p>
-<h3 id="第三关：基于错误的单引号变形字符注入"><a href="#第三关：基于错误的单引号变形字符注入" class="headerlink" title="第三关：基于错误的单引号变形字符注入"></a>第三关：基于错误的单引号变形字符注入</h3><p>报错的信息显示的是放到一对单引号加圆括号里面，这样我直接闭合它前面的左括号在后面添加id=1’）就可以注入了</p>
-<h3 id="第四关：基于错误的双引号的字符型的注入"><a href="#第四关：基于错误的双引号的字符型的注入" class="headerlink" title="第四关：基于错误的双引号的字符型的注入"></a>第四关：基于错误的双引号的字符型的注入</h3><p>思路都一样 有点换汤不换药的感觉，双引号闭合在加 <code>)</code>这样又可以注入了</p>
-<h3 id="第五关：双注入get单引号字符型注入"><a href="#第五关：双注入get单引号字符型注入" class="headerlink" title="第五关：双注入get单引号字符型注入"></a>第五关：双注入get单引号字符型注入</h3><p>这题有点延时注入的感觉</p>
+        <p>题目地址：<a href="https://ctf.bugku.com/challenges" target="_blank" rel="noopener">https://ctf.bugku.com/challenges</a></p>
+<p>这里只是做了部分题目还有很多题目没来的及。以后有空在写吧</p>
+<h3 id="web2"><a href="#web2" class="headerlink" title="web2 :"></a>web2 :</h3><p>这里做一下一些基础题目巩固一下知识web2这里打开链接查看源代码可以直接拿到flag<img src="/images/bugctf/1573544169289.png" alt="1573544166418"></p>
+<h3 id="计算器："><a href="#计算器：" class="headerlink" title="计算器："></a>计算器：</h3><p>这里发现输入的数据只能输入1位 然后审查元素发现maxlength=1这里直接修改代码为3</p>
+<p><img src="/images/bugctf/1573544431438.png" alt="1573544431438"></p>
+<p>最后直接拿到flag<img src="/images/bugctf/1573544492988.png" alt="1573544492988"></p>
+<h3 id="web基础-GET"><a href="#web基础-GET" class="headerlink" title="web基础$_GET"></a>web基础$_GET</h3><p><img src="/images/bugctf/1573544632396.png" alt="1573544632396"></p>
+<p>这里进来是可以直接看到代码的，可以看出当get过来的参数what=flag时 就可以拿到flag</p>
+<p><img src="/images/bugctf/1573544935076.png" alt="1573544935076"></p>
+<h3 id="web基础-POST"><a href="#web基础-POST" class="headerlink" title="web基础$_POST"></a>web基础$_POST</h3><p>这里跟get差不多的只是说这里请求方式是post方式的这里至于要构造表单 或者抓包 或者hackbar都可以</p>
+<p><img src="/images/bugctf/1573545095593.png" alt="1573545095593"></p>
+<p><img src="/images/bugctf/1573545396397.png" alt="1573545396397"></p>
+<h3 id="矛盾"><a href="#矛盾" class="headerlink" title="矛盾"></a>矛盾</h3><p>这关进来也是直接看到代码</p>
+<p><img src="/images/bugctf/1573545504676.png" alt="1573545504676"></p>
+<p>这里发现要输出flag有个条件就是：is_numeric这个函数胡是检测变量是否为数字或数字字符串，这里必须要num这个变量不是数字和num为1才会输出flag，这里想到的是1加字符串。利用php的弱类型比较，双等于不会去判断类型的比较，这里还可以用科学计数的方法，让num这个值表示既是1也是不是纯数字。<img src="/images/bugctf/1573546075026.png" alt="1573546075026"></p>
+<p><img src="/images/bugctf/1573546350802.png" alt="1573546350802"></p>
+<h3 id="web3："><a href="#web3：" class="headerlink" title="web3："></a>web3：</h3><p>一直跳flag就在这里查看源代码发现<img src="/images/bugctf/1573547153016.png" alt="1573547153016"></p>
+<p>这个应该是被实体编码了这里直接解码就可以得到flag<img src="/images/bugctf/1573547462880.png" alt="1573547462880"></p>
+<h3 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h3><p>这里提示把flag.baidu.com解析到123.206.87.240这里windows下面可以直接拿到在<code>windows</code>下找到<code>c:/windows/system32/drivers/etc/host</code>文件<img src="/images/bugctf/1573547933407.png" alt="1573547933407"></p>
+<p>按理说当我访问发个flag.bugku.com就可以拿到flag才对但是这里没有拿到  也不知道为啥，</p>
+<h3 id="你必须让他停下"><a href="#你必须让他停下" class="headerlink" title="你必须让他停下"></a>你必须让他停下</h3><p>这里用burp不断的放包<img src="/images/bugctf/1573549220044.png" alt="1573549220044"></p>
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><p><img src="/images/bugctf/1573608043784.png" alt="1573608043784"></p>
+<p>这里直接get一个参数打印一个全局看看，发现可以直接拿到flag</p>
+<p><img src="/images/bugctf/1573614095258.png" alt="1573614095258"></p>
+<h3 id="web5"><a href="#web5" class="headerlink" title="web5"></a>web5</h3><p><img src="/images/bugctf/1573614232232.png" alt="1573614232232"></p>
+<p>这里直接查看源代码这里发现是这个，有点懵了  查了一下发现这是jsFuck</p>
+<p><img src="/images/bugctf/1573614380215.png" alt="1573614380215">·</p>
+<p><img src="/images/bugctf/1573631026743.png" alt="1573631026743"></p>
+<h3 id="网站被黑"><a href="#网站被黑" class="headerlink" title="网站被黑"></a>网站被黑</h3><p><img src="/images/bugctf/1573636642491.png" alt="1573636642491"></p>
+<p><img src="/images/bugctf/1573636497120.png" alt="1573636497120"></p>
+<p><img src="/images/bugctf/1573636734712.png" alt="1573636734712"></p>
 
       
     </div>
@@ -486,6 +521,15 @@
 
     <footer class="post-footer">
       
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/bugctf/" rel="tag"># bugctf</a>
+          
+        </div>
+      
 
       
       
@@ -495,8 +539,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/26/阿里云服务器搭建外网msf/" rel="next" title>
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2019/09/26/阿里云服务器搭建外网msf/" rel="next" title="阿里云服务器搭建外网msf">
+                <i class="fa fa-chevron-left"></i> 阿里云服务器搭建外网msf
               </a>
             
           </div>
@@ -605,7 +649,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -634,7 +680,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">6</span>
+                      
+                    
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -679,7 +727,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL-INJECTION-LABS"><span class="nav-number">1.</span> <span class="nav-text">SQL   INJECTION   LABS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一关：是基于错误GET单引号错误类型"><span class="nav-number">1.1.</span> <span class="nav-text">第一关：是基于错误GET单引号错误类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二关：整型注入"><span class="nav-number">1.2.</span> <span class="nav-text">第二关：整型注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三关：基于错误的单引号变形字符注入"><span class="nav-number">1.3.</span> <span class="nav-text">第三关：基于错误的单引号变形字符注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四关：基于错误的双引号的字符型的注入"><span class="nav-number">1.4.</span> <span class="nav-text">第四关：基于错误的双引号的字符型的注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第五关：双注入get单引号字符型注入"><span class="nav-number">1.5.</span> <span class="nav-text">第五关：双注入get单引号字符型注入</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#web2"><span class="nav-number">1.</span> <span class="nav-text">web2 :</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算器："><span class="nav-number">2.</span> <span class="nav-text">计算器：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web基础-GET"><span class="nav-number">3.</span> <span class="nav-text">web基础$_GET</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web基础-POST"><span class="nav-number">4.</span> <span class="nav-text">web基础$_POST</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#矛盾"><span class="nav-number">5.</span> <span class="nav-text">矛盾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web3："><span class="nav-number">6.</span> <span class="nav-text">web3：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#域名解析"><span class="nav-number">7.</span> <span class="nav-text">域名解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#你必须让他停下"><span class="nav-number">8.</span> <span class="nav-text">你必须让他停下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量"><span class="nav-number">9.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web5"><span class="nav-number">10.</span> <span class="nav-text">web5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网站被黑"><span class="nav-number">11.</span> <span class="nav-text">网站被黑</span></a></li></ol></div>
             
 
           </div>
