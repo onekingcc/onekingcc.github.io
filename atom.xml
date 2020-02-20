@@ -41,27 +41,6 @@
   </entry>
   
   <entry>
-    <title></title>
-    <link href="http://onekingcc.github.io/2020/01/08/sqli-labs%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80/"/>
-    <id>http://onekingcc.github.io/2020/01/08/sqli-labs数据库基础/</id>
-    <published>2020-01-08T07:32:58.486Z</published>
-    <updated>2020-01-08T07:32:58.687Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="sqli-labs数据库基础"><a href="#sqli-labs数据库基础" class="headerlink" title="sqli-labs数据库基础"></a>sqli-labs数据库基础</h2><h3 id="数据库基础知识"><a href="#数据库基础知识" class="headerlink" title="数据库基础知识"></a>数据库基础知识</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table_name limit m,n  #表示从m+1开始取n条查询</span><br></pre></td></tr></table></figure><p><img src="/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql-labs%5C1578464975973.png" alt="1578464975973"></p><p>注入一般流程：</p><p>猜解数据库名：</p><p><img src="/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql-labs%5C1578467499268.png" alt="1578467499268"></p><p>猜表：</p><p><img src="/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql-labs%5C1578467583874.png" alt="1578467583874"></p><p>猜列名：</p><p><img src="/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql-labs%5C1578467803570.png" alt="1578467803570"></p><p>猜解某个字段的值：</p><p><img src="/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql-labs%5C1578467999127.png" alt="1578467999127"></p><h3 id="mysql常用的函数"><a href="#mysql常用的函数" class="headerlink" title="mysql常用的函数"></a>mysql常用的函数</h3><p>user()———————数据库用户名</p><p>database()————————数据库用户名</p><p>version()—————————–Mysql版本信息</p><h4 id="常见连接字符串操作的函数"><a href="#常见连接字符串操作的函数" class="headerlink" title="常见连接字符串操作的函数"></a>常见连接字符串操作的函数</h4><p>concat(str1,str2,str3)返回的是str1+str2+str3;当有个字符串为NULL时，就返回NULL。<br>group_concat（str1,str2,str3）,返回str1+str2+str3;</p><h4 id="常见的payload中的函数"><a href="#常见的payload中的函数" class="headerlink" title="常见的payload中的函数"></a>常见的payload中的函数</h4><p>ascii(a)将a转换成其ASCII值<br>ord(a)将a转换成其ASCII值<br>left(a,b)从左往右截取字符串a的前b个字符<br>substr(a,b,c)从b位置开始，截取字符串a的c长度<br>mid(a,b,c)从位置b开始，截取a字符串的c位</p><h4 id="like"><a href="#like" class="headerlink" title="like"></a>like</h4><p><img src="/.io//D:%5Conekingcc%5Csource%5Cimages%5Csql-labs%5C1578468741322.png" alt="1578468741322"></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;sqli-labs数据库基础&quot;&gt;&lt;a href=&quot;#sqli-labs数据库基础&quot; class=&quot;headerlink&quot; title=&quot;sqli-labs数据库基础&quot;&gt;&lt;/a&gt;sqli-labs数据库基础&lt;/h2&gt;&lt;h3 id=&quot;数据库基础知识&quot;&gt;&lt;a href=
-      
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>记一次xhcms代码审计学习</title>
     <link href="http://onekingcc.github.io/2019/12/20/%E5%88%9D%E6%8E%A2%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1xhcms/"/>
     <id>http://onekingcc.github.io/2019/12/20/初探代码审计xhcms/</id>
