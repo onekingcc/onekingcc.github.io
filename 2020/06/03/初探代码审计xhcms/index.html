@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":5},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="因为之前忙着公司的一些事情，一直没有完成自己的计划，今天有时间了打算写一下审计的过程，算是自己的代码审计的入坑，这里还是想读一下源码首先看一下该cms的目录结构，所以这里首先从入口文件进入index.php  任意文件包含1234567&amp;lt;?php//单一入口模式error_reporting(0); //关闭错误显示$file=addslashes($_GET[&apos;r&apos;]); //接收文件名$">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次xhcms代码审计学习">
+<meta property="og:url" content="http://onekingcc.github.io/2020/06/03/初探代码审计xhcms/index.html">
+<meta property="og:site_name" content="onekingcc&#39;s Blog">
+<meta property="og:description" content="因为之前忙着公司的一些事情，一直没有完成自己的计划，今天有时间了打算写一下审计的过程，算是自己的代码审计的入坑，这里还是想读一下源码首先看一下该cms的目录结构，所以这里首先从入口文件进入index.php  任意文件包含1234567&amp;lt;?php//单一入口模式error_reporting(0); //关闭错误显示$file=addslashes($_GET[&apos;r&apos;]); //接收文件名$">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://onekingcc.github.io/images/xhcms/1576808222189.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/xhcms/1576809383030.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/xhcms/1576811811077.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/xhcms/1576829110852.png">
+<meta property="og:updated_time" content="2019-12-20T09:17:38.764Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="记一次xhcms代码审计学习">
+<meta name="twitter:description" content="因为之前忙着公司的一些事情，一直没有完成自己的计划，今天有时间了打算写一下审计的过程，算是自己的代码审计的入坑，这里还是想读一下源码首先看一下该cms的目录结构，所以这里首先从入口文件进入index.php  任意文件包含1234567&amp;lt;?php//单一入口模式error_reporting(0); //关闭错误显示$file=addslashes($_GET[&apos;r&apos;]); //接收文件名$">
+<meta name="twitter:image" content="http://onekingcc.github.io/images/xhcms/1576808222189.png">
+
+
+
+  <link rel="alternate" href="/atom.xm" title="onekingcc's Blog" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://onekingcc.github.io/2020/06/03/初探代码审计xhcms/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>记一次xhcms代码审计学习 | onekingcc's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">onekingcc's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://onekingcc.github.io/2020/06/03/初探代码审计xhcms/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="onekingcc">
+      <meta itemprop="description" content="写博客就是为了和过去以及未来的自己对话">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="onekingcc's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">记一次xhcms代码审计学习
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-03 22:28:12" itemprop="dateCreated datePublished" datetime="2020-06-03T22:28:12+08:00">2020-06-03</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-12-20 17:17:38" itemprop="dateModified" datetime="2019-12-20T17:17:38+08:00">2019-12-20</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>因为之前忙着公司的一些事情，一直没有完成自己的计划，今天有时间了打算写一下审计的过程，算是自己的代码审计的入坑，这里还是想读一下源码首先看一下该cms的目录结构，所以这里首先从入口文件进入index.php</p>
+<p><img src="/images/xhcms/1576808222189.png" alt="1576808222189"></p>
+<h3 id="任意文件包含"><a href="#任意文件包含" class="headerlink" title="任意文件包含"></a>任意文件包含</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//单一入口模式</span></span><br><span class="line">error_reporting(<span class="number">0</span>); <span class="comment">//关闭错误显示</span></span><br><span class="line">$file=addslashes($_GET[<span class="string">'r'</span>]); <span class="comment">//接收文件名</span></span><br><span class="line">$action=$file==<span class="string">''</span>?<span class="string">'index'</span>:$file; <span class="comment">//判断为空或者等于index</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">'files/'</span>.$action.<span class="string">'.php'</span>); <span class="comment">//载入相应文件</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里从GET传进一个参数r，传过来参数经过addslashes()处理会将用户传进来单引号（’）双引号(‘’)反斜线(/)与NUL转义掉</p>
+<p>当传进的$file为空就会跳转到index.php，否则就会进入include包含。这里传进来的$file传进来的r是可控，然后直接带进include函数造成任意文件包含，这里发现是在files目录下的，但是并没有对目录进行判断可以用../来穿越目录。</p>
+<p><img src="/images/xhcms/1576809383030.png" alt="1576809383030"></p>
+<h3 id="update注入"><a href="#update注入" class="headerlink" title="update注入"></a>update注入</h3><p>这里继续跟进到files/index.php中看r这个参数传递到哪里了，全局搜索一下发现在34行处</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;?r=content&amp;cid=&lt;?php echo $toutiaoimg[&apos;id&apos;]?&gt;&quot; title=&quot;&lt;?php echo $toutiaoimg[&apos;title&apos;]?&gt;&quot;&gt;&lt;img src=&quot;&lt;?php echo $toutiaoimg[&apos;images&apos;]?&gt;&quot;&gt;&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里r=content 那么就会包含到content.php, 并且跟了一个cid的参数，这个cid是$toutiaoimg[‘id’]带进去的，然后再输出页面，这个去找一下$toutiaoimg这个变量</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$query = <span class="string">"SELECT * FROM content WHERE images&lt;&gt;'' AND xs=1 ORDER BY id DESC  LIMIT 1"</span>;</span><br><span class="line">$resul = mysql_query($query) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'SQL语句有误：'</span>.mysql_error());</span><br><span class="line">$toutiaoimg = mysql_fetch_array($resul);</span><br></pre></td></tr></table></figure>
+
+<p>发现就是”SELECT * FROM settings”的cid的值</p>
+<p><img src="/images/xhcms/1576811811077.png" alt="1576811811077"></p>
+<p>那么现在的访问的话就是<a href="http://localhost/xhcms/index.php?r=content&amp;cid=1继续跟进content.php看看cid这个参数" target="_blank" rel="noopener">http://localhost/xhcms/index.php?r=content&amp;cid=1继续跟进content.php看看cid这个参数</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="keyword">require</span> <span class="string">'inc/conn.php'</span>;</span><br><span class="line"><span class="keyword">require</span> <span class="string">'inc/time.class.php'</span>;</span><br><span class="line">$query = <span class="string">"SELECT * FROM settings"</span>;</span><br><span class="line">$resul = mysql_query($query) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'SQL语句有误：'</span>.mysql_error());</span><br><span class="line">$info = mysql_fetch_array($resul);</span><br><span class="line"></span><br><span class="line">$id=addslashes($_GET[<span class="string">'cid'</span>]);</span><br><span class="line">$query = <span class="string">"SELECT * FROM content WHERE id='$id'"</span>;</span><br><span class="line">$resul = mysql_query($query) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'SQL语句有误：'</span>.mysql_error());</span><br><span class="line">$content = mysql_fetch_array($resul);</span><br><span class="line"></span><br><span class="line">$navid=$content[<span class="string">'navclass'</span>];</span><br><span class="line">$query = <span class="string">"SELECT * FROM navclass WHERE id='$navid'"</span>;</span><br><span class="line">$resul = mysql_query($query) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'SQL语句有误：'</span>.mysql_error());</span><br><span class="line">$navs = mysql_fetch_array($resul);</span><br><span class="line"></span><br><span class="line"><span class="comment">//浏览计数</span></span><br><span class="line">$query = <span class="string">"UPDATE content SET hit = hit+1 WHERE id=$id"</span>;</span><br><span class="line">@mysql_query($query) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'修改错误：'</span>.mysql_error());</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$query=mysql_query(<span class="string">"select * FROM interaction WHERE (cid='$id' AND type=1 and xs=1)"</span>);</span><br><span class="line">$pinglunzs = mysql_num_rows($query)</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里一共找到5处带有cid参数的第一处</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$id=addslashes($_GET[<span class="string">'cid'</span>]);</span><br><span class="line">$query = <span class="string">"SELECT * FROM content WHERE id='$id'"</span>;</span><br><span class="line">$resul = mysql_query($query) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'SQL语句有误：'</span>.mysql_error());</span><br><span class="line">$content = mysql_fetch_array($resul);</span><br></pre></td></tr></table></figure>
+
+<p>这里的对get传进来的cid参数然后用addslashes()函数转义，然后赋值给$id了，这里就如果想注入的话就需要闭合单引号(‘)绕过addslashes的转义需要的部分条件用GBK的方式，所以无法注入，再往下翻看到浏览计数的发现没有被引号包裹起来石锤注入了</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$query = <span class="string">"UPDATE content SET hit = hit+1 WHERE id=$id"</span>;</span><br><span class="line">@mysql_query($query) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'修改错误：'</span>.mysql_error());</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>很明显的update注入，而且还有回显可以使用报错注入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?r=content&amp;cid=1 or(updatexml(1,concat(0x7e,(select%20version()),0x7e),1))</span><br></pre></td></tr></table></figure>
+
+<h3 id="存储XSS"><a href="#存储XSS" class="headerlink" title="存储XSS"></a>存储XSS</h3><p>接着往下搜索发现在评论内容处</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php?&gt;</span><br><span class="line"></span><br><span class="line">&lt;div id=&quot;plbt&quot;&gt;&lt;strong&gt;→ 和谐网络，文明发言！&lt;/strong&gt;发表评论：&lt;/div&gt;</span><br><span class="line">&lt;form  name=&quot;form&quot; method=&quot;post&quot; action=&quot;/?r=submit&amp;type=comment&amp;cid=&lt;?php echo $id?&gt;&quot;&gt;</span><br><span class="line">&lt;input name=&quot;cid&quot; type=&quot;hidden&quot; value=&quot;&lt;?php echo $id?&gt;&quot;/&gt;</span><br><span class="line">&lt;ul&gt;</span><br><span class="line">&lt;li&gt;&lt;span&gt;昵称&lt;/span&gt;&lt;input name=&quot;name&quot; type=&quot;text&quot; value=&quot;&lt;?php echo $_COOKIE[&apos;name&apos;]?&gt;&quot; /&gt;&lt;/li&gt;</span><br><span class="line">&lt;li&gt;&lt;span&gt;邮箱&lt;/span&gt;&lt;input name=&quot;mail&quot; type=&quot;text&quot; value=&quot;&lt;?php echo $_COOKIE[&apos;mail&apos;]?&gt;&quot;/&gt;&lt;/li&gt;</span><br><span class="line">&lt;li&gt;&lt;span&gt;网址&lt;/span&gt;&lt;input name=&quot;url&quot; type=&quot;text&quot; value=&quot;&lt;?php echo $_COOKIE[&apos;url&apos;]?&gt;&quot;/&gt;&lt;/li&gt;</span><br><span class="line">&lt;textarea name=&quot;content&quot; cols=&quot;&quot; rows=&quot;&quot;&gt;&lt;/textarea&gt;</span><br><span class="line">&lt;input name=&quot;save&quot; type=&quot;submit&quot;  value=&quot;提交&quot; id=&quot;input2&quot;/&gt;</span><br><span class="line">&lt;div id=&quot;code&quot;&gt;&lt;span&gt;验证码&lt;/span&gt;&lt;input name=&quot;randcode&quot; type=&quot;text&quot; /&gt; &lt;span id=&quot;yspan&quot;&gt;&lt;img src=&quot;../inc/code.class.php&quot; onClick=&quot;this.src=this.src+&apos;?&apos;+Math.random();&quot; title=&quot;看不清楚?点击刷新验证码?&quot;&gt;&lt;/span&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;xx&quot;&gt;</span><br><span class="line">&lt;span&gt;&lt;input name=&quot;jz&quot; type=&quot;checkbox&quot; value=&quot;1&quot; checked=&quot;checked&quot;/&gt; 记住我的个人信息&lt;/span&gt;</span><br><span class="line">&lt;span&gt;&lt;input name=&quot;tz&quot; type=&quot;checkbox&quot; value=&quot;1&quot; checked=&quot;checked&quot;/&gt; 回复后邮件通知我&lt;/span&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;div id=&quot;qcfd&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里发表评论提交到了submit.php这里跟进去</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">session_start();</span><br><span class="line"><span class="keyword">require</span> <span class="string">'inc/conn.php'</span>;</span><br><span class="line">$type=addslashes($_GET[<span class="string">'type'</span>]);</span><br><span class="line">$name=$_POST[<span class="string">'name'</span>];</span><br><span class="line">$mail=$_POST[<span class="string">'mail'</span>];</span><br><span class="line">$url=$_POST[<span class="string">'url'</span>];</span><br><span class="line">$content=$_POST[<span class="string">'content'</span>];</span><br><span class="line">$cid=$_POST[<span class="string">'cid'</span>];</span><br><span class="line">$ip=$_SERVER[<span class="string">"REMOTE_ADDR"</span>];</span><br><span class="line">$tz=$_POST[<span class="string">'tz'</span>];</span><br><span class="line"><span class="keyword">if</span> ($tz==<span class="string">""</span>)&#123;$tz=<span class="number">0</span>;&#125;</span><br><span class="line">$jz=$_POST[<span class="string">'jz'</span>];</span><br></pre></td></tr></table></figure>
+
+<p>这里首先开启了session对传入type进行addslashes转义，后面对POST提交的name,mail,url 等一系列参数都没有任何过滤这里没有进行二次过滤可能存在存储型的xss</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!preg_match(<span class="string">"/([/x81-/xfe][/x40-/xfe])/"</span>, $content, $match)) &#123;</span><br><span class="line">echo <span class="string">"&lt;Script language=JavaScript&gt;alert('亲，再说点别的了吧？');history.back();&lt;/Script&gt;"</span>;</span><br><span class="line">exit;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里对$content,$match采用了正则<code>([/x81-/xfe][/x40-/xfe])</code>是对GBK中文编码的匹配，如果评论中不包含中文字符则提示“亲，再说点别的了吧？</p>
+<p>接着往下看</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ($url&lt;&gt;<span class="string">""</span>)&#123;</span><br><span class="line"><span class="keyword">if</span> (strstr($url, <span class="string">"http://"</span>))</span><br><span class="line">&#123;</span><br><span class="line">$url=	$url;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">$url=	<span class="string">"http://"</span>.$url;	</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">$content= addslashes(strip_tags($content));<span class="comment">//过滤HTML</span></span><br></pre></td></tr></table></figure>
+
+<p>这里对url进行过滤，首先判断url是否为空，不为空则用strstr()找是否存在“http://”如果存在的话就在$url前面添加http://,最后对传进去的content进行addslashes，但是其他参数没有过滤，这里对其他参数进行xss发现成功弹窗存在存储型xss</p>
+<p><img src="/images/xhcms/1576829110852.png" alt="1576829110852"></p>
+<p>接着往下跟进</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$query = <span class="string">"SELECT * FROM interaction WHERE( mail = '$mail')"</span>;</span><br><span class="line">$result = mysql_query($query) or die(<span class="string">'SQL语句有误：'</span>.mysql_error());</span><br><span class="line">$tx = mysql_fetch_array($result);</span><br><span class="line"><span class="keyword">if</span> (!mysql_num_rows($result))&#123;  </span><br><span class="line">$touxiang = mt_rand(<span class="number">1</span>,<span class="number">100</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">$touxiang = $tx[<span class="string">'touxiang'</span>];</span><br></pre></td></tr></table></figure>
+
+<p>这里很明显的$mail存在注入payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-- POST</span><br><span class="line">111@qq.com&apos;) and updatexml(1,concat(0x7e,(select version()),0x73),1)#</span><br></pre></td></tr></table></figure>
+
+<p>后面发现注入一大堆这里直接先看看后台有啥</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">ob_start();</span><br><span class="line"><span class="keyword">require</span> <span class="string">'../inc/conn.php'</span>;</span><br><span class="line">$login=$_POST[<span class="string">'login'</span>];</span><br><span class="line">$user=$_POST[<span class="string">'user'</span>];</span><br><span class="line">$password=$_POST[<span class="string">'password'</span>];</span><br><span class="line">$checkbox=$_POST[<span class="string">'checkbox'</span>];</span><br><span class="line"><span class="keyword">if</span> ($login&lt;&gt;<span class="string">""</span>)&#123;</span><br><span class="line">$query = <span class="string">"SELECT * FROM manage WHERE user='$user'"</span>;</span><br><span class="line">$result = mysql_query($query) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'SQL语句有误：'</span>.mysql_error());</span><br><span class="line">$users = mysql_fetch_array($result);</span><br></pre></td></tr></table></figure>
+
+<h3 id="登录处绕过"><a href="#登录处绕过" class="headerlink" title="登录处绕过"></a>登录处绕过</h3><p>很明显的注入了这里发现这里暂时不看注入看看其他的在../inc/checklogin.php处</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$user=$_COOKIE[<span class="string">'user'</span>];</span><br><span class="line"><span class="keyword">if</span> ($user==<span class="string">""</span>)&#123;</span><br><span class="line">header(<span class="string">"Location: ?r=login"</span>);</span><br><span class="line"><span class="keyword">exit</span>;	</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>很明显可以存在绕过,这里如果$user为空就会重定向到login.php,假如user的值存在就可以绕过后台直接进入后台。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这个cms对于入门真的是一个很好的入门点当然里面的漏洞远远不止这么一点还有一大堆注入，这里只是想对在审计的一些思路和流程过一遍，当然这样看的话很累，但是也能理解他的流程，也可以直接根据找危险函数进行查看然后再溯源。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/03/代码审计之SQL注入：bluecms_v1.6/" rel="next" title="代码审计之SQL注入：bluecms_v1.6">
+                <i class="fa fa-chevron-left"></i> 代码审计之SQL注入：bluecms_v1.6
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/03/对闭包的一次探讨/" rel="prev" title="对闭包的一次理解">
+                对闭包的一次理解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="onekingcc">
+            
+              <p class="site-author-name" itemprop="name">onekingcc</p>
+              <div class="site-description motion-element" itemprop="description">写博客就是为了和过去以及未来的自己对话</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xm" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#任意文件包含"><span class="nav-number">1.</span> <span class="nav-text">任意文件包含</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update注入"><span class="nav-number">2.</span> <span class="nav-text">update注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存储XSS"><span class="nav-number">3.</span> <span class="nav-text">存储XSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#登录处绕过"><span class="nav-number">4.</span> <span class="nav-text">登录处绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">onekingcc</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+</html>
