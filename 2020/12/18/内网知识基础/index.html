@@ -94,18 +94,24 @@
 
 
 
-  <meta name="description" content="因为最近在写登录这个模块功能的时候，然后选择第三方接口登录，阅读了官方文档的API文档，所以决定记录下来">
-<meta name="keywords" content="开发接口">
+  <meta name="description" content="SAM路径： C:\Windows\System32\config  登录的过程中，系统就会自动去读取SAM文件中的密码，然后与用户输入的密码进行比对。 NTLM（NT LAN Manager）HASH 密码在windows中都是hash进行存储的，将用户的明文密码经过加密之后存储到sam中。  当用户登录的时候，window会将用户输入的明文密码加密成NTLM Hash，然后再与sam中NTLM">
+<meta name="keywords" content="web安全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用第三方接口授权登录github的流程">
-<meta property="og:url" content="http://onekingcc.github.io/2019/07/09/使用第三方接口登录github的流程/index.html">
+<meta property="og:title" content="内网知识基础">
+<meta property="og:url" content="http://onekingcc.github.io/2020/12/18/内网知识基础/index.html">
 <meta property="og:site_name" content="onekingcc&#39;s Blog">
-<meta property="og:description" content="因为最近在写登录这个模块功能的时候，然后选择第三方接口登录，阅读了官方文档的API文档，所以决定记录下来">
+<meta property="og:description" content="SAM路径： C:\Windows\System32\config  登录的过程中，系统就会自动去读取SAM文件中的密码，然后与用户输入的密码进行比对。 NTLM（NT LAN Manager）HASH 密码在windows中都是hash进行存储的，将用户的明文密码经过加密之后存储到sam中。  当用户登录的时候，window会将用户输入的明文密码加密成NTLM Hash，然后再与sam中NTLM">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-11-14T06:48:42.798Z">
+<meta property="og:image" content="http://onekingcc.github.io/images/shentouceshi/clip_image001.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/shentouceshi/clip_image002.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/shentouceshi/clip_image003.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/shentouceshi/clip_image004.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/shentouceshi/clip_image005.png">
+<meta property="og:updated_time" content="2020-12-18T09:05:00.044Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用第三方接口授权登录github的流程">
-<meta name="twitter:description" content="因为最近在写登录这个模块功能的时候，然后选择第三方接口登录，阅读了官方文档的API文档，所以决定记录下来">
+<meta name="twitter:title" content="内网知识基础">
+<meta name="twitter:description" content="SAM路径： C:\Windows\System32\config  登录的过程中，系统就会自动去读取SAM文件中的密码，然后与用户输入的密码进行比对。 NTLM（NT LAN Manager）HASH 密码在windows中都是hash进行存储的，将用户的明文密码经过加密之后存储到sam中。  当用户登录的时候，window会将用户输入的明文密码加密成NTLM Hash，然后再与sam中NTLM">
+<meta name="twitter:image" content="http://onekingcc.github.io/images/shentouceshi/clip_image001.png">
 
 
 
@@ -115,7 +121,7 @@
 
   
   
-  <link rel="canonical" href="http://onekingcc.github.io/2019/07/09/使用第三方接口登录github的流程/">
+  <link rel="canonical" href="http://onekingcc.github.io/2020/12/18/内网知识基础/">
 
 
 
@@ -125,7 +131,7 @@
   };
 </script>
 
-  <title>使用第三方接口授权登录github的流程 | onekingcc's Blog</title>
+  <title>内网知识基础 | onekingcc's Blog</title>
   
 
 
@@ -336,7 +342,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://onekingcc.github.io/2019/07/09/使用第三方接口登录github的流程/">
+    <link itemprop="mainEntityOfPage" href="http://onekingcc.github.io/2020/12/18/内网知识基础/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="onekingcc">
@@ -353,7 +359,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">使用第三方接口授权登录github的流程
+          <h1 class="post-title" itemprop="name headline">内网知识基础
 
               
             
@@ -379,23 +385,13 @@
                 
               
 
-              <time title="创建时间：2019-07-09 14:55:01" itemprop="dateCreated datePublished" datetime="2019-07-09T14:55:01+08:00">2019-07-09</time>
+              <time title="创建时间：2020-12-18 16:56:55 / 修改时间：17:05:00" itemprop="dateCreated datePublished" datetime="2020-12-18T16:56:55+08:00">2020-12-18</time>
             </span>
           
 
           
             
 
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2020-11-14 14:48:42" itemprop="dateModified" datetime="2020-11-14T14:48:42+08:00">2020-11-14</time>
-              </span>
             
           
 
@@ -408,7 +404,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/开发/" itemprop="url" rel="index"><span itemprop="name">开发</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/内网/" itemprop="url" rel="index"><span itemprop="name">内网</span></a></span>
 
                 
                 
@@ -446,16 +442,47 @@
       
 
       
-        <p>因为最近在写登录这个模块功能的时候，然后选择第三方接口登录，阅读了官方文档的API文档，所以决定记录下来<a id="more"></a>：</p>
-<h2 id="登录情景"><a href="#登录情景" class="headerlink" title="登录情景"></a>登录情景</h2><p>首先有一个用户发送一个消息，请求登录社区，这时点击登录时，首先完成自己的逻辑，去构造相应的证书，client_secret，client，client_id然后再去调用github的接口。</p>
-<h2 id="如何调用github接口"><a href="#如何调用github接口" class="headerlink" title="如何调用github接口"></a>如何调用github接口</h2><ol>
-<li>首先它是去调用的一个授权的地址authorize，当验证通过后github会重新访问社区。</li>
-<li>之后github会主动去回调redirect_uri预先写好的地址携带code访问社区</li>
-<li>社区接受到这里的地址请求时，然后通过access_token解析携带code再次调用github</li>
-<li>这里如果code验证正确，就会返回一个access_token</li>
-<li>这时user携带acces_token,如果正确就会返回user信息</li>
-<li>存入数据库，更新登录状态。</li>
+        <h2 id="SAM"><a href="#SAM" class="headerlink" title="SAM"></a>SAM</h2><p>路径：</p>
+<p>C:\Windows\System32\config</p>
+<p><img src="/images/shentouceshi/clip_image001.png" alt="img"></p>
+<p>登录的过程中，系统就会自动去读取SAM文件中的密码，然后与用户输入的密码进行比对。</p>
+<h2 id="NTLM（NT-LAN-Manager）HASH"><a href="#NTLM（NT-LAN-Manager）HASH" class="headerlink" title="NTLM（NT LAN Manager）HASH"></a>NTLM（NT LAN Manager）HASH</h2><ol>
+<li><p>密码在windows中都是hash进行存储的，将用户的明文密码经过加密之后存储到sam中。</p>
+</li>
+<li><p>当用户登录的时候，window会将用户输入的明文密码加密成NTLM Hash，然后再与sam中NTLM hash 进行比较</p>
+</li>
 </ol>
+<h3 id="NTLM-hash——产生"><a href="#NTLM-hash——产生" class="headerlink" title="NTLM hash——产生"></a>NTLM hash——产生</h3><p>admin-&gt;hex(16进制编码)= 61646d696e</p>
+<p>61646d696e-&gt;Unicode=610064006d0069006e00</p>
+<p>610064006d0069006e00-&gt;MD4=209c6174da490caeb422f3fa5a7ae634</p>
+<p>admin=&gt;209c6174da490caeb422f3fa5a7ae634</p>
+<h2 id="本地认证流程"><a href="#本地认证流程" class="headerlink" title="本地认证流程"></a>本地认证流程</h2><p><img src="/images/shentouceshi/clip_image002.png" alt="img"></p>
+<p>Winlogon.exe 是windows NT用户登录程序，用户管理用户的登录和登出</p>
+<p>LSASS用于winodws安全机制，本地安全和登录策略。</p>
+<h2 id="Windows-网络认证"><a href="#Windows-网络认证" class="headerlink" title="Windows 网络认证"></a>Windows 网络认证</h2><p>内网中很多时候遇到的基本都是工作组环境，工作组就相当于一个独立的网络环境，只能进行点对点进行，没有信托。通俗来说有点像可信赖的中介，需要进行进行双方的沟通。</p>
+<p><strong>工作组</strong>：相当于逻辑上的网络环境，比如存在两个子网，本来是不可达，但是可以通过路由交换的方式然后达到互通的效果。</p>
+<p>举个例子假如处于局域网中的A和B，A访问B主机上的资源，这时候就需要将B主机上的账户凭证发送给B主机，认证之后才能访问B主机上的资源。比如SMB服务。（共享服务，文件的创建，修改之类，但是认证还得依赖于NTLM协议）</p>
+<h2 id="NTLM协议"><a href="#NTLM协议" class="headerlink" title="NTLM协议"></a>NTLM协议</h2><p>早期SMB是明文方式的传输，后来就出现了LAN Manager Challenge/Response 验证协议 简称LM </p>
+<p><img src="/images/shentouceshi/clip_image003.png" alt="img"></p>
+<p>server端收到client端后会去本地账户列表判定是否有对应share_user</p>
+<p>1.如果有，就生成challenge，并从本地去获取user存储对应的NTLM Hash，使用NTLM Hash加密challenge，生成一个Net-NTLM Hash放在内存中，并将challenge发送给client。如果没有，就认证失败</p>
+<p>2.client收到challenge后，将自己提供的share_user的密码转化为NTLM hash，使用net-NTLM hash加密challenge，生成response，，最后将response 发送给server。</p>
+<ol start="3">
+<li>server端收到response，将response与之前的NET-NTLM hash进行比较，如果相等则认证通过。</li>
+</ol>
+<h2 id="PASS-THE-HASH（哈希传递）"><a href="#PASS-THE-HASH（哈希传递）" class="headerlink" title="PASS THE HASH（哈希传递）"></a>PASS THE HASH（哈希传递）</h2><p>哈希传递：其实就是使用用户名对应的NTLM hash将服务器给出的challenge加密，生成一个response完成认证。</p>
+<p>哈希传递能够在不需要账户明文的方式完成一个认证的一个技术。</p>
+<p>哈希传递作用：</p>
+<p>解决在渗透中获取不到明文密码，破解不了NTLM Hash然后想发现更多的东西扩大战果的东西</p>
+<h2 id="Active-Directory（活动目录）"><a href="#Active-Directory（活动目录）" class="headerlink" title="Active Directory（活动目录）"></a>Active Directory（活动目录）</h2><p><strong>Active Directory 中存储了有关网络对象的信息，能让管理员和用户很方便的找到这些信息，而且他存储的方式是以结构化的数据存储方式，并且以此为基础对目录信息进行合乎逻辑的分层。</strong></p>
+<p><strong>网络对象：计算机，用户，用户组，域，组织单位以及安全策略。</strong></p>
+<p>这里的活动目录其实是安装到域控上的。</p>
+<h2 id="Kerberos"><a href="#Kerberos" class="headerlink" title="Kerberos"></a>Kerberos</h2><p>Kerbos协议是一种认证协议，并不是授权，使用的是票据进行认证，并不是challenge-response这种质询的方式。</p>
+<p>这里需要知道KDC概念</p>
+<p>KDC：用于处理Kerberos身份验证请求，通常是域控制器，或者至少具有对用户和服务机密（哈希）的访问权，并且由2个服务组成，</p>
+<p><img src="/images/shentouceshi/clip_image004.png" alt="img"></p>
+<p><img src="/images/shentouceshi/clip_image005.png" alt="img"></p>
+<p>客户端仅要求提供证明其身份的票证，对其进行缓存并在连接服务时使用它。客户端和服务之间没有用于认证的开放隧道，实际上，整个认证过程（在正常情况下）发生在客户端和KDC之间，甚至没有连接到服务。当然这里只是进行了初步的了解，具体深入可以看看这篇文章<a href="https://blog.redforce.io/windows-authentication-attacks-part-2-kerberos/" target="_blank" rel="noopener">https://blog.redforce.io/windows-authentication-attacks-part-2-kerberos/</a></p>
 
       
     </div>
@@ -482,7 +509,7 @@
         
         <div class="post-tags">
           
-            <a href="/tags/开发接口/" rel="tag"># 开发接口</a>
+            <a href="/tags/web安全/" rel="tag"># web安全</a>
           
         </div>
       
@@ -495,15 +522,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2020/11/23/记一次php反序例化pop链学习/" rel="next" title="记一次php反序例化pop链学习">
+                <i class="fa fa-chevron-left"></i> 记一次php反序例化pop链学习
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/07/11/代码审计之SQL注入：bluecms_v1.6/" rel="prev" title="代码审计之SQL注入：bluecms_v1.6">
-                代码审计之SQL注入：bluecms_v1.6 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -685,7 +712,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#登录情景"><span class="nav-number">1.</span> <span class="nav-text">登录情景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何调用github接口"><span class="nav-number">2.</span> <span class="nav-text">如何调用github接口</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SAM"><span class="nav-number">1.</span> <span class="nav-text">SAM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NTLM（NT-LAN-Manager）HASH"><span class="nav-number">2.</span> <span class="nav-text">NTLM（NT LAN Manager）HASH</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NTLM-hash——产生"><span class="nav-number">2.1.</span> <span class="nav-text">NTLM hash——产生</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本地认证流程"><span class="nav-number">3.</span> <span class="nav-text">本地认证流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows-网络认证"><span class="nav-number">4.</span> <span class="nav-text">Windows 网络认证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NTLM协议"><span class="nav-number">5.</span> <span class="nav-text">NTLM协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PASS-THE-HASH（哈希传递）"><span class="nav-number">6.</span> <span class="nav-text">PASS THE HASH（哈希传递）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Active-Directory（活动目录）"><span class="nav-number">7.</span> <span class="nav-text">Active Directory（活动目录）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kerberos"><span class="nav-number">8.</span> <span class="nav-text">Kerberos</span></a></li></ol></div>
             
 
           </div>
