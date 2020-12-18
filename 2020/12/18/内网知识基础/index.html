@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://onekingcc.github.io/images/shentouceshi/clip_image003.png">
 <meta property="og:image" content="http://onekingcc.github.io/images/shentouceshi/clip_image004.png">
 <meta property="og:image" content="http://onekingcc.github.io/images/shentouceshi/clip_image005.png">
-<meta property="og:updated_time" content="2020-12-18T09:29:15.338Z">
+<meta property="og:updated_time" content="2020-12-18T09:39:01.281Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="内网知识基础">
 <meta name="twitter:description" content="SAM路径： C:\Windows\System32\config  登录的过程中，系统就会自动去读取SAM文件中的密码，然后与用户输入的密码进行比对。 NTLM（NT LAN Manager）HASH 密码在windows中都是hash进行存储的，将用户的明文密码经过加密之后存储到sam中。  当用户登录的时候，window会将用户输入的明文密码加密成NTLM Hash，然后再与sam中NTLM">
@@ -385,7 +385,7 @@
                 
               
 
-              <time title="创建时间：2020-12-18 16:56:55 / 修改时间：17:29:15" itemprop="dateCreated datePublished" datetime="2020-12-18T16:56:55+08:00">2020-12-18</time>
+              <time title="创建时间：2020-12-18 16:56:55 / 修改时间：17:39:01" itemprop="dateCreated datePublished" datetime="2020-12-18T16:56:55+08:00">2020-12-18</time>
             </span>
           
 
@@ -464,9 +464,9 @@
 <p>举个例子假如处于局域网中的A和B，A访问B主机上的资源，这时候就需要将B主机上的账户凭证发送给B主机，认证之后才能访问B主机上的资源。比如SMB服务。（共享服务，文件的创建，修改之类，但是认证还得依赖于NTLM协议）</p>
 <h2 id="NTLM协议"><a href="#NTLM协议" class="headerlink" title="NTLM协议"></a>NTLM协议</h2><p>早期SMB是明文方式的传输，后来就出现了LAN Manager Challenge/Response 验证协议 简称LM </p>
 <p><img src="/images/shentouceshi/clip_image003.png" alt="img"></p>
-<p>server端收到client端后会去本地账户列表判定是否有对应share_user</p>
+<p>server端收到client端后会去本地账户列表判定是否有对应user</p>
 <p>1.如果有，就生成challenge，并从本地去获取user存储对应的NTLM Hash，使用NTLM Hash加密challenge，生成一个Net-NTLM Hash放在内存中，并将challenge发送给client。如果没有，就认证失败</p>
-<p>2.client收到challenge后，将自己提供的share_user的密码转化为NTLM hash，使用net-NTLM hash加密challenge，生成response，，最后将response 发送给server。</p>
+<p>2.client收到challenge后，将自己提供的user的密码转化为NTLM hash，使用net-NTLM hash加密challenge，生成response，，最后将response 发送给server。</p>
 <p>3.server端收到response，将response与之前的NET-NTLM hash进行比较，如果相等则认证通过。</p>
 <h2 id="PASS-THE-HASH（哈希传递）"><a href="#PASS-THE-HASH（哈希传递）" class="headerlink" title="PASS THE HASH（哈希传递）"></a>PASS THE HASH（哈希传递）</h2><p>哈希传递：其实就是使用用户名对应的NTLM hash将服务器给出的challenge加密，生成一个response完成认证。</p>
 <p>哈希传递能够在不需要账户明文的方式完成一个认证的一个技术。</p>
