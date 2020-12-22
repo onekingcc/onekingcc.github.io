@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://onekingcc.github.io/"/>
-  <updated>2020-12-18T09:39:01.281Z</updated>
+  <updated>2020-12-22T09:32:40.378Z</updated>
   <id>http://onekingcc.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>常见提权方式</title>
+    <link href="http://onekingcc.github.io/2020/12/22/%E5%B8%B8%E8%A7%81%E6%8F%90%E6%9D%83%E6%96%B9%E5%BC%8F/"/>
+    <id>http://onekingcc.github.io/2020/12/22/常见提权方式/</id>
+    <published>2020-12-22T09:27:54.005Z</published>
+    <updated>2020-12-22T09:32:40.378Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><h3 id="suid提权"><a href="#suid提权" class="headerlink" title="suid提权"></a>suid提权</h3><p>当程序运行需要高权限，但是用户不具备高权限时，这时则可以给文件设置SUID，使得用户在执行文件时将以文件所有者的权限来运行文件，而不是运行者本身权限。</p><p>find / -perm -u=s -type f 2&gt;/dev/null // 用来寻找服务器上设置了SUID的应用程序 find / -user root -perm -4000-print2&gt;/dev/null find / -user root -perm -4000-exec ls -ldb {} ;</p><p><img src="/images/tiquan/clip_image001.png" alt="img"></p><h3 id="脏牛提权"><a href="#脏牛提权" class="headerlink" title="脏牛提权"></a>脏牛提权</h3><p>查看内核信息版本</p><p><img src="/images/tiquan/clip_image002.png" alt="img"></p><p><img src="/images/tiquan/clip_image003.png" alt="img"></p><p>查看/etc/passwd 下的是否能写入，</p><p><img src="/images/tiquan/clip_image004.png" alt="img"></p><p>由冒号分割，第一列是用户名（tiago）<br> 第二列是密码，x表示密码的hash值保存在shadow文件中<br> 第三列是UID，为UserId，用户标识号用户的UID大于500的都是非系统账号，500以下du的都为系统保留的账号，比如root账号，至高权限的账号的UID为0,我们创建用户的时候默认的账号的UID都是大于500<br> 第四列是GID，即组id<br> 第五列是用户全名或本地账号<br> 第六列是home目录<br> 第七列是登录之后使用的终端命令</p><p>-rw-r-r 读写-读-读</p><p><img src="/images/tiquan/clip_image005.png" alt="img"></p><p>接下来就是将exp下载到靶机上</p><p><img src="/images/tiquan/clip_image006.png" alt="img"></p><p>这里试了很多最后没有成功，估计是exp的线程太大，跑死了，最后采用的是40877那个才成功了</p><p>g++ -Wall -pedantic -O2 -std=c++11 -pthread -o dirtycow dirtycow.cpp -lutil</p><p>c++格式的文件，先编译，编译命令 g++ -Wall -pedantic -O2 -std=c++11 -pthread -o dcow 40847.cpp -lutil</p><p>-Wall 一般使用该选项，允许发出 GCC 能够提供的所有有用的警告</p><p>-pedantic 允许发出 ANSI/ISO C 标准所列出的所有警告</p><p>-O2 编译器的优化选项的 4 个级别，-O0 表示没有优化,-O1 为缺省值，-O3 优化级别最高 -std=c++11 就是用按 C++2011 标准来编译的</p><p>-pthread 在 Linux 中要用到多线程时，需要链接 pthread 库</p><p>-o dcow gcc 生成的目标文件,名字为 dirtycow</p><p>./dirtycow -s 相当于跳出循环，不会一直执行</p><p><img src="/images/tiquan/clip_image007.png" alt="img"></p><p><img src="/images/tiquan/clip_image008.png" alt="img"></p><h3 id="etc-passwd提权"><a href="#etc-passwd提权" class="headerlink" title="/etc/passwd提权"></a>/etc/passwd提权</h3><p>这种严重配置问题导致的提权看似少见,但是也是真实存在,不过真的很少，普通用户有写入的权限 </p><p>ll /etc/passwd 查看文件是否可读可写，然后加盐</p><p><img src="/images/tiquan/clip_image009.png" alt="img"></p><p>perl -le ‘print crypt(“password@123”,”addedsalt”)’ </p><p>制作密码的方式很多，还可以使用</p><p>openssl passwd -1 -salt salt password<br> mkpasswd -m SHA-512 password<br> python -c ‘import crypt; print crypt.crypt(“password”,”$6$salt”)’ php -r “print(crypt(‘password’,’salt’) . &quot;\n&quot;);” </p><p><img src="/images/tiquan/clip_image010.png" alt="img"></p><p>echo “test:advwtv/9yU5yQ:0:0:User_like_root:/root:/bin/bash” &gt;&gt;/etc/passwd tail -l /etc/passwd </p><p>再写入权限 </p><p><img src="/images/tiquan/clip_image011.png" alt="img"> </p><p><img src="/images/tiquan/clip_image012.png" alt="img"></p><h3 id="进程服务提权"><a href="#进程服务提权" class="headerlink" title="进程服务提权"></a>进程服务提权</h3><h4 id="Mysql提权"><a href="#Mysql提权" class="headerlink" title="Mysql提权"></a>Mysql提权</h4><p>Mysql下像udf提权就比较常见了，主要注意就是版本的问题。</p><p>1.查看插件库的路径</p><p>show variables like ‘%plugin%’;</p><p>2.知道路径之后将udf库插入到目录</p><p>3.创建函数</p><p>create function sys_eval returns string soname ‘mysqltest.so’;</p><p>一般支持sys_eval、sys_exec、sys_get、sys_set</p><p>然后直接执行对应命令即可。Selelct sys_eval(‘whoami’)</p><h2 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h2><p>现在windows下的各提权方式也很多，在倾旋大佬的blog中也写了很多在windows本地提权的技巧</p><p><a href="https://payloads.online/archivers/2018-10-08/1#0x01-服务路径权限可控" target="_blank" rel="noopener">https://payloads.online/archivers/2018-10-08/1#0x01-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E5%BE%84%E6%9D%83%E9%99%90%E5%8F%AF%E6%8E%A7</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;Linux&quot;&gt;&lt;a href=&quot;#Linux&quot; class=&quot;headerlink&quot; title=&quot;Linux&quot;&gt;&lt;/a&gt;Linux&lt;/h2&gt;&lt;h3 id=&quot;suid提权&quot;&gt;&lt;a href=&quot;#suid提权&quot; class=&quot;headerlink&quot; title=&quot;s
+      
+    
+    </summary>
+    
+      <category term="web安全" scheme="http://onekingcc.github.io/categories/web%E5%AE%89%E5%85%A8/"/>
+    
+    
+      <category term="web安全" scheme="http://onekingcc.github.io/tags/web%E5%AE%89%E5%85%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>内网知识基础</title>
@@ -475,28 +500,6 @@
     
       <category term="代码审计" scheme="http://onekingcc.github.io/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>使用第三方接口授权登录github的流程</title>
-    <link href="http://onekingcc.github.io/2019/07/09/%E4%BD%BF%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E6%8E%A5%E5%8F%A3%E7%99%BB%E5%BD%95github%E7%9A%84%E6%B5%81%E7%A8%8B/"/>
-    <id>http://onekingcc.github.io/2019/07/09/使用第三方接口登录github的流程/</id>
-    <published>2019-07-09T06:55:01.000Z</published>
-    <updated>2020-11-14T06:48:42.798Z</updated>
-    
-    <content type="html"><![CDATA[<p>因为最近在写登录这个模块功能的时候，然后选择第三方接口登录，阅读了官方文档的API文档，所以决定记录下来<a id="more"></a>：</p><h2 id="登录情景"><a href="#登录情景" class="headerlink" title="登录情景"></a>登录情景</h2><p>首先有一个用户发送一个消息，请求登录社区，这时点击登录时，首先完成自己的逻辑，去构造相应的证书，client_secret，client，client_id然后再去调用github的接口。</p><h2 id="如何调用github接口"><a href="#如何调用github接口" class="headerlink" title="如何调用github接口"></a>如何调用github接口</h2><ol><li>首先它是去调用的一个授权的地址authorize，当验证通过后github会重新访问社区。</li><li>之后github会主动去回调redirect_uri预先写好的地址携带code访问社区</li><li>社区接受到这里的地址请求时，然后通过access_token解析携带code再次调用github</li><li>这里如果code验证正确，就会返回一个access_token</li><li>这时user携带acces_token,如果正确就会返回user信息</li><li>存入数据库，更新登录状态。</li></ol>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;因为最近在写登录这个模块功能的时候，然后选择第三方接口登录，阅读了官方文档的API文档，所以决定记录下来&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="开发" scheme="http://onekingcc.github.io/categories/%E5%BC%80%E5%8F%91/"/>
-    
-    
-      <category term="开发接口" scheme="http://onekingcc.github.io/tags/%E5%BC%80%E5%8F%91%E6%8E%A5%E5%8F%A3/"/>
     
   </entry>
   
