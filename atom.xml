@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://onekingcc.github.io/"/>
-  <updated>2020-12-22T09:32:40.378Z</updated>
+  <updated>2021-05-11T13:21:04.984Z</updated>
   <id>http://onekingcc.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一次简单的mimikatz免杀</title>
+    <link href="http://onekingcc.github.io/2021/05/11/%E4%B8%80%E6%AC%A1%E7%AE%80%E5%8D%95%E7%9A%84mimikatz%E5%85%8D%E6%9D%80/"/>
+    <id>http://onekingcc.github.io/2021/05/11/一次简单的mimikatz免杀/</id>
+    <published>2021-05-10T16:00:00.000Z</published>
+    <updated>2021-05-11T13:21:04.984Z</updated>
+    
+    <content type="html"><![CDATA[<p>右键项目名称的属性-&gt;配置管理器-&gt;活动解决方案选择win32</p><p><img src="/images/mini/clip_image001.png" alt="img"></p><p>配置C/C++ 勾选将警告视为错误为 否，并关闭所有警告</p><p><img src="/images/mini/clip_image002.png" alt="img"></p><p>重新生成一下解决方案，保证能正常运行</p><p><img src="/images/mini/clip_image003.png" alt="img"></p><p> 成功生成</p><p><img src="/images/mini/clip_image004.png" alt="img"></p><p>替换特征字符 将mimikatz替换</p><p><img src="/images/mini/clip_image005.png" alt="img"></p><p><img src="/images/mini/clip_image006.png" alt="img"></p><p>将帮助信息开发者id域名进行修改 mimilove–&gt;mimilove.c</p><p><img src="/images/mini/clip_image007.png" alt="img"></p><p><img src="/images/mini/clip_image008.png" alt="img"></p><p>3.替换ico</p><p><img src="/images/mini/clip_image009.png" alt="img"></p><p><img src="/images/mini/clip_image010.png" alt="img"> </p><p>最后再给加个壳，完美</p><p><img src="/images/mini/clip_image011.png" alt="img"></p><p><img src="/images/mini/clip_image012.png" alt="img"></p><p><img src="/images/mini/clip_image013.png" alt="img"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;右键项目名称的属性-&amp;gt;配置管理器-&amp;gt;活动解决方案选择win32&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/mini/clip_image001.png&quot; alt=&quot;img&quot;&gt;&lt;/p&gt;
+&lt;p&gt;配置C/C++ 勾选将警告视为错误为 否，并关闭所有警告&lt;/p&gt;
+      
+    
+    </summary>
+    
+      <category term="免杀" scheme="http://onekingcc.github.io/categories/%E5%85%8D%E6%9D%80/"/>
+    
+    
+      <category term="免杀" scheme="http://onekingcc.github.io/tags/%E5%85%8D%E6%9D%80/"/>
+    
+  </entry>
   
   <entry>
     <title>常见提权方式</title>
