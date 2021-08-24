@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="1.写这个文章的目的是什么？ 这个框架也比较老了，现在都有6.0了吧，那为什么要分析这么老的东西呢，主要是学习代码审计，知其然知其所以然。 环境： Thinkphp3.2.3 + mamp + PHPSTORM 现在很多都是mvc的开发模式，而且很多cms会在thinkphp进行二次开发，所以知道这种开发模式是很有必要的 mvc 就是将视图 控制 数据 进行分开的开发模式 Model模型：这个一般">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Thinkphp3.2.3 框架sql注入">
+<meta property="og:url" content="http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/index.html">
+<meta property="og:site_name" content="onekingcc&#39;s Blog">
+<meta property="og:description" content="1.写这个文章的目的是什么？ 这个框架也比较老了，现在都有6.0了吧，那为什么要分析这么老的东西呢，主要是学习代码审计，知其然知其所以然。 环境： Thinkphp3.2.3 + mamp + PHPSTORM 现在很多都是mvc的开发模式，而且很多cms会在thinkphp进行二次开发，所以知道这种开发模式是很有必要的 mvc 就是将视图 控制 数据 进行分开的开发模式 Model模型：这个一般">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906000610051.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906000358043.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906003255263.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906160837306.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906163603000.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906172859905.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200907124705224.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906165620942.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906165717247.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906165759568.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906170643966.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906171130633.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906171407011.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906171556311.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906171707521.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906171957173.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906172331233.png">
+<meta property="og:updated_time" content="2020-11-12T03:46:45.310Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Thinkphp3.2.3 框架sql注入">
+<meta name="twitter:description" content="1.写这个文章的目的是什么？ 这个框架也比较老了，现在都有6.0了吧，那为什么要分析这么老的东西呢，主要是学习代码审计，知其然知其所以然。 环境： Thinkphp3.2.3 + mamp + PHPSTORM 现在很多都是mvc的开发模式，而且很多cms会在thinkphp进行二次开发，所以知道这种开发模式是很有必要的 mvc 就是将视图 控制 数据 进行分开的开发模式 Model模型：这个一般">
+<meta name="twitter:image" content="http://onekingcc.github.io/images/daimashenji/image-20200906000610051.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Thinkphp3.2.3 框架sql注入</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- rss -->
+    
+    
+</head>
+
+<body>
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/friends/">Friends</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/11/23/记一次php反序例化pop链学习/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover='$("#i-prev").toggle();' onmouseout='$("#i-prev").toggle();'></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/07/11/java基础学习之类的加载机制/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover='$("#i-next").toggle();' onmouseout='$("#i-next").toggle();'></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover='$("#i-top").toggle();' onmouseout='$("#i-top").toggle();'></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover='$("#i-share").toggle();' onmouseout='$("#i-share").toggle();' onclick='$("#share").toggle();return false;'></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&text=Thinkphp3.2.3 框架sql注入"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&title=Thinkphp3.2.3 框架sql注入"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&is_video=false&description=Thinkphp3.2.3 框架sql注入"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Thinkphp3.2.3 框架sql注入&body=Check out this article: http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&title=Thinkphp3.2.3 框架sql注入"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&title=Thinkphp3.2.3 框架sql注入"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&title=Thinkphp3.2.3 框架sql注入"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&title=Thinkphp3.2.3 框架sql注入"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&name=Thinkphp3.2.3 框架sql注入&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#文件结构"><span class="toc-number">1.</span> <span class="toc-text">文件结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#where常规注入"><span class="toc-number">2.</span> <span class="toc-text">where常规注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分析"><span class="toc-number">3.</span> <span class="toc-text">分析</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index width mx-auto px2 my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Thinkphp3.2.3 框架sql注入
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">onekingcc's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2020-09-07T06:05:50.588Z" itemprop="datePublished">2020-09-07</time>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>1.写这个文章的目的是什么？</p>
+<p>这个框架也比较老了，现在都有6.0了吧，那为什么要分析这么老的东西呢，主要是学习代码审计，知其然知其所以然。</p>
+<p>环境： Thinkphp3.2.3 + mamp + PHPSTORM</p>
+<p>现在很多都是mvc的开发模式，而且很多cms会在thinkphp进行二次开发，所以知道这种开发模式是很有必要的</p>
+<p>mvc 就是将视图 控制 数据 进行分开的开发模式</p>
+<p>Model模型：这个一般都是程序的核心，主要就是负责存取数据，然后负责逻辑操作。</p>
+<p>View视图：是应用程序中处理数据显示的部分。然后视图是依据模型数据创建的。其实就是展示html页面</p>
+<p>Controller：控制器负责从视图读取数据，控制用户输入，并向模型发送数据。一般都是类文件，通过里面的方法来对整个web应用增删改查之类的操作。</p>
+<h4 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h4><p><img src="/images/daimashenji/image-20200906000610051.png" alt="image-20200906000610051"></p>
+<p><img src="/images/daimashenji/image-20200906000358043.png" alt="image-20200906000358043"></p>
+<p>里面有一个很重要的文件在\ThinkPHP\library\Think\Model.class.php 这个文件夹包含了很多的连贯操作，就是对数据库的连贯性，而且连贯操作方法是没有调用顺序的，举个例子调用了where之后然后再对order进行排序。查询User表中满足状态值为200的前10条记录，并按照时间排序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$User-&gt;order(&apos;create_time&apos;)-&gt;limit(10)-&gt;where(&apos;status=200&apos;)-&gt;select();</span><br></pre></td></tr></table></figure>
+
+<p>这里的where，order ，limit方法就称为连贯操作方法，所有的连贯操作都返回当前的模型实例对象（this），如果带*标识的表示支持多次调用。还有\ThinkPHP\library\Think\Db\Driver.class.php文件也比较重要包括了数据分析，各种操作数据库之类的,这里看Structure就知道了看这些是否有必要了</p>
+<p><img src="/images/daimashenji/image-20200906003255263.png" alt="image-20200906003255263"></p>
+<p>这里Model.class.php 的limit方法就算你传入的$offset的字符串没有过滤,最后也会将你的值强制转换成整型</p>
+<h4 id="where常规注入"><a href="#where常规注入" class="headerlink" title="where常规注入"></a>where常规注入</h4><p>where():字符串的方式将条件作为where方法的参数就会产生注入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M(&apos;user&apos;)-&gt;where(&apos;id=&apos;.I(&apos;id&apos;))-&gt;find()</span><br></pre></td></tr></table></figure>
+
+<p>但是如果是数组查询进入_parseType方法分析，数组的val值就会转换为int</p>
+<p>这里测试一下用官方的写法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getUserIndex</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="comment">/* $User = A('User');</span></span><br><span class="line"><span class="comment">   $User-&gt;index();*/</span></span><br><span class="line">    $data = M(<span class="string">'User'</span>)-&gt;where(<span class="string">'id='</span>.I(<span class="string">'id'</span>))-&gt;find();</span><br><span class="line">    dump($data);</span><br></pre></td></tr></table></figure>
+
+<p>然后进行访问很明显id这里是存在注入点的</p>
+<p><img src="/images/daimashenji/image-20200906160837306.png" alt="image-20200906160837306"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">222) and =(updatexml(1,(concat(0x7e,(select user()),0x7e)),1)</span><br></pre></td></tr></table></figure>
+
+<p>利用报错注入闭合语句就可以了</p>
+<p><img src="/images/daimashenji/image-20200906163603000.png" alt="image-20200906163603000"></p>
+<h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p>在对应处下断点进行调试</p>
+<p><img src="/images/daimashenji/image-20200906172859905.png" alt="image-20200906172859905"></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$data = M(<span class="string">'User'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这个其实就是快速实例化一个User模型类，等效于 </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$data = <span class="keyword">new</span> Model(<span class="string">'User'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>会走到I方法，对传进来的参数$name 先进行htmlspecialchars，然后进行think_filter处理</p>
+<p><img src="/images/daimashenji/image-20200907124705224.png" alt="image-20200907124705224"></p>
+<p>F7跟进一直跟到1798行的时候会进入到一个where方法</p>
+<p><img src="/images/daimashenji/image-20200906165620942.png" alt="image-20200906165620942"></p>
+<p>这里F7跟进去看看，发现在1808行的时候会对where方法传进的值进行判断，判断是否是字符串，并且非空，如果满足条件就进入到该分支里面，我们的值很明显是满足条件</p>
+<p><img src="/images/daimashenji/image-20200906165717247.png" alt="image-20200906165717247"></p>
+<p>在跟到1816行的时候返回的是一个string类型一个数组，key是_string ,val等于id=222s</p>
+<p><img src="/images/daimashenji/image-20200906165759568.png" alt="image-20200906165759568"></p>
+<p>一直跟到489行的时候进入到了核心位置，到了paresWhere()方法，满足条件</p>
+<p><img src="/images/daimashenji/image-20200906170643966.png" alt="image-20200906170643966"></p>
+<p>在510行的时候进入到parseThinkWhere方法中</p>
+<p><img src="/images/daimashenji/image-20200906171130633.png" alt="image-20200906171130633"></p>
+<p>继续跟，可以发现$key的值为_string,进入到字符串查询模式</p>
+<p><img src="/images/daimashenji/image-20200906171407011.png" alt="image-20200906171407011"></p>
+<p>在650行的时候返回id=222s</p>
+<p><img src="/images/daimashenji/image-20200906171556311.png" alt="image-20200906171556311"></p>
+<p>539行的时候继续进行拼接</p>
+<p><img src="/images/daimashenji/image-20200906171707521.png" alt="image-20200906171707521"></p>
+<p>543行的时候继续内部拼接，返回带括号的id=222s</p>
+<p><img src="/images/daimashenji/image-20200906171957173.png" alt="image-20200906171957173"></p>
+<p>一直跟到993行的时候，最终可以看到返回了完整的sql<img src="/images/daimashenji/image-20200906172331233.png" alt="image-20200906172331233"></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/friends/">Friends</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#文件结构"><span class="toc-number">1.</span> <span class="toc-text">文件结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#where常规注入"><span class="toc-number">2.</span> <span class="toc-text">where常规注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分析"><span class="toc-number">3.</span> <span class="toc-text">分析</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&text=Thinkphp3.2.3 框架sql注入"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&title=Thinkphp3.2.3 框架sql注入"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&is_video=false&description=Thinkphp3.2.3 框架sql注入"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Thinkphp3.2.3 框架sql注入&body=Check out this article: http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&title=Thinkphp3.2.3 框架sql注入"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&title=Thinkphp3.2.3 框架sql注入"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&title=Thinkphp3.2.3 框架sql注入"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&title=Thinkphp3.2.3 框架sql注入"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://onekingcc.github.io/2020/09/07/Thinkphp3.2.3 sql注入分析/&name=Thinkphp3.2.3 框架sql注入&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick='$("#toc-footer").toggle();return false;'><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick='$("#share-footer").toggle();return false;'><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick='$("#nav-footer").toggle();return false;'><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 onekingcc
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/friends/">Friends</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+
