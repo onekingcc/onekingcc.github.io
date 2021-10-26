@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="java在计算机运行的三个阶段这里先抛开java反射这个概念，先看运行阶段。 第一个阶段：写代码的时候就会有有个大体框架一个类文件、里面存放这个public class xxx 类，里面就会有成员变量、构造方法、成员方法等。完成一个类的编写之后想执行就需要一个编译器进行编译java文件，编译完成之后里面就会生成一个class字节码文件，里面就会包含之前类名、成员变量、成员方法、构造方法等。这时候代">
+<meta name="keywords" content="java安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java基础学习-java反射">
+<meta property="og:url" content="http://onekingcc.github.io/2020/07/11/java基础学习-java反射/index.html">
+<meta property="og:site_name" content="onekingcc&#39;s Blog">
+<meta property="og:description" content="java在计算机运行的三个阶段这里先抛开java反射这个概念，先看运行阶段。 第一个阶段：写代码的时候就会有有个大体框架一个类文件、里面存放这个public class xxx 类，里面就会有成员变量、构造方法、成员方法等。完成一个类的编写之后想执行就需要一个编译器进行编译java文件，编译完成之后里面就会生成一个class字节码文件，里面就会包含之前类名、成员变量、成员方法、构造方法等。这时候代">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://onekingcc.github.io/Users/onekingcc/blog/onekingcc/source/images/image-20210902110829576.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/image-20200711151016164.png">
+<meta property="og:image" content="http://onekingcc.github.io/images/image-20200711153759074.png">
+<meta property="og:image" content="http://onekingcc.github.io/Users/onekingcc/blog/onekingcc/source/images/image-20210902143239987.png">
+<meta property="og:image" content="http://onekingcc.github.io/Users/onekingcc/blog/onekingcc/source/images/image-20210906103508256.png">
+<meta property="og:image" content="http://onekingcc.github.io/Users/onekingcc/blog/onekingcc/source/images/image-20210906111056814.png">
+<meta property="og:updated_time" content="2021-09-28T05:14:20.128Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java基础学习-java反射">
+<meta name="twitter:description" content="java在计算机运行的三个阶段这里先抛开java反射这个概念，先看运行阶段。 第一个阶段：写代码的时候就会有有个大体框架一个类文件、里面存放这个public class xxx 类，里面就会有成员变量、构造方法、成员方法等。完成一个类的编写之后想执行就需要一个编译器进行编译java文件，编译完成之后里面就会生成一个class字节码文件，里面就会包含之前类名、成员变量、成员方法、构造方法等。这时候代">
+<meta name="twitter:image" content="http://onekingcc.github.io/Users/onekingcc/blog/onekingcc/source/images/image-20210902110829576.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>java基础学习-java反射</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- rss -->
+    
+    
+</head>
+
+<body>
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/friends/">Friends</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/09/07/Thinkphp3.2.3 sql注入分析/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover='$("#i-prev").toggle();' onmouseout='$("#i-prev").toggle();'></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/06/03/阿里云服务器搭建外网msf/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover='$("#i-next").toggle();' onmouseout='$("#i-next").toggle();'></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover='$("#i-top").toggle();' onmouseout='$("#i-top").toggle();'></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover='$("#i-share").toggle();' onmouseout='$("#i-share").toggle();' onclick='$("#share").toggle();return false;'></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&text=java基础学习-java反射"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&title=java基础学习-java反射"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&is_video=false&description=java基础学习-java反射"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=java基础学习-java反射&body=Check out this article: http://onekingcc.github.io/2020/07/11/java基础学习-java反射/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&title=java基础学习-java反射"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&title=java基础学习-java反射"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&title=java基础学习-java反射"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&title=java基础学习-java反射"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&name=java基础学习-java反射&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#java在计算机运行的三个阶段"><span class="toc-number">1.</span> <span class="toc-text">java在计算机运行的三个阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类的加载机制"><span class="toc-number">2.</span> <span class="toc-text">类的加载机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#java的反射机制"><span class="toc-number">3.</span> <span class="toc-text">java的反射机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#反射获取Class对象"><span class="toc-number">3.1.</span> <span class="toc-text">反射获取Class对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取成员变量"><span class="toc-number">3.2.</span> <span class="toc-text">获取成员变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取构造方法"><span class="toc-number">3.3.</span> <span class="toc-text">获取构造方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#反射获取成员方法"><span class="toc-number">3.4.</span> <span class="toc-text">反射获取成员方法</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index width mx-auto px2 my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        java基础学习-java反射
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">onekingcc's Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2020-07-11T07:47:53.021Z" itemprop="datePublished">2020-07-11</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/java安全/">java安全</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="java在计算机运行的三个阶段"><a href="#java在计算机运行的三个阶段" class="headerlink" title="java在计算机运行的三个阶段"></a>java在计算机运行的三个阶段</h3><p>这里先抛开java反射这个概念，先看运行阶段。</p>
+<p>第一个阶段：写代码的时候就会有有个大体框架一个类文件、里面存放这个public class xxx 类，里面就会有成员变量、构造方法、成员方法等。完成一个类的编写之后想执行就需要一个编译器进行编译java文件，编译完成之后里面就会生成一个class字节码文件，里面就会包含之前类名、成员变量、成员方法、构造方法等。这时候代码还是属于在硬盘上的，并没有进内存。</p>
+<p>第二阶段：Class类对象把字节码加载进内存（也就是在第一阶段编译成的x x x.class的字节码）这个就需要类加载器，然后也对应一个对象ClassLoader。里面还存在一个loadclass()方法，正因为也是通过这个方法才完成了类加载。生成了第一阶段中类中的某个对象。在java中都是用对象来描述，然后就会有<strong>Class 类对象</strong>，在java中有一个Class类专门用来描述字节码文件的一些共同特征。</p>
+<p>第三阶段：Runtime阶段，需要把字节码的片段加载到内存之后，然后就会有对象</p>
+<p><a href="https://blog.csdn.net/u011442726/article/details/99060961" target="_blank" rel="noopener">这里用一下网上有个图</a></p>
+<p>也比较直观</p>
+<p><img src="/Users/onekingcc/blog/onekingcc/source/images/image-20210902110829576.png" alt="image-20210902110829576"></p>
+<h3 id="类的加载机制"><a href="#类的加载机制" class="headerlink" title="类的加载机制"></a>类的加载机制</h3><p>类加载机制也叫ClassLoader，所有的类加载器（除了根类加载器），都必须是继承java.lang.classloader.。然后java它是依赖于JVM的东西，其实就是个虚拟机。首先java是一种编译型的语言，然后java的程序在运行程序前首先编译成class文件这样才能被jvm运行 ,然后java类初始化的时候首先是会加载类字节码。JVM在执行类之前会先解析class二进制内容，JVM执行生成的字节码(<code>ByteCode</code>)。个人理解类加载就是将磁盘上的class文件加载到内存中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.chelizi832.day1;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SingleTon</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> count1;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> count2 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingleTon instance = <span class="keyword">new</span> SingleTon(); <span class="comment">// 结果为1 1</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleTon</span><span class="params">()</span></span>&#123;</span><br><span class="line">        count1++;</span><br><span class="line">        count2++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingleTon <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//上面就是一个简单的单例模式</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoadTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    SingleTon.getInstance();</span><br><span class="line">    System.out.println(SingleTon.count1);</span><br><span class="line">    System.out.println(SingleTon.count2);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果这里将private static SingleTon instance = new SingleTon(); 放在上面就变1，0</p>
+<p><img src="/images/image-20200711151016164.png" alt="image-20200711151016164"></p>
+<p>1.初始化阶段，才真正的开始执行类中定义java程序代码，</p>
+<p>2.初始化阶段他执行的是<strong>类构造器<client>()方法</client></strong>，对象构造器我们都知道，对象的构造器 就是创建每一个对象就会实现对象的初始化方法。然后类构造器的话我理解的就是类在字节码加载的时候会执行的初始化的方法叫类构造方法。</p>
+<p>类加载-&gt;连接验证-&gt;准备-&gt;解析-&gt;初始化</p>
+<p><img src="/images/image-20200711153759074.png" alt="image-20200711153759074"></p>
+<p>绿色圈中的则是在准备阶段，准备阶段为0，也没问题，count1=0 ，count2=0，在第三行的时候就会去执行构造器里面的构造方法++，所以count1=1 ，count2=1。</p>
+<p>第二种先new，程序自上而下执行，会去触发你的加载连接初始化，在初始化的时候也有一个client&lt;&gt;方法 ，因为有静态的成员  ，在new的时候就要去执行构造器里面的构造方法++，这时你的count1=1，count2=1。接下来就是执行第二句，它啥也没有做，而第三句做了个初始化操作。重新赋值。所以最后变成了count1=1，count2=0.还有注意一点就是变量不能引用在它定义这个字段之前，因为在初始化的时候执行类构造器方法，这个顺序是<strong>源文件中出现的顺序决定的</strong>可以赋值但不能访问。</p>
+<h3 id="java的反射机制"><a href="#java的反射机制" class="headerlink" title="java的反射机制"></a>java的反射机制</h3><p><a href="https://zhishihezi.net/b/5d644b6f81cbc9e40460fe7eea3c7925" target="_blank" rel="noopener">这里很多都写得不错也便于理解</a></p>
+<p>java反射( Java Reflection),反射机制它允许在程序执行的时候借助Relection API去取的任何类的内部信息，然后能直接操作任意对象的内部属性和方法。前面说了类的加载机制，那么加载完类之后，就会在内存中产生一个Class类型的对象然后一个类的话里面只有一个Class对象。有点去回调函数的意思。<strong>官方的反射：是将类中的各个组成部分封装成其他的对象。</strong>这个也好理解</p>
+<p>可以回到java的运行的三个阶段那个图中在一二阶段中</p>
+<ul>
+<li>将类的成员变量封装成Filed[] 对象</li>
+<li>将类的构造方法封装成Constructor  对象</li>
+<li>将类的成员方法封装成Method[] 对象</li>
+</ul>
+<h4 id="反射获取Class对象"><a href="#反射获取Class对象" class="headerlink" title="反射获取Class对象"></a>反射获取Class对象</h4><p>1.Class.forName(类名) #将字节码加载进内存，返回的class对象</p>
+<p>2.类名.class. #通过类名的属性class 获取</p>
+<p>3.对象.getClass()  #这个getClass()是在Object类中，返回此 <code>Object</code>的运行时类</p>
+<p>这里我本地写了一个person类，测试一下上面获取对象的几种方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Class.forName(全类名) #将字节码加载进内存，返回的class对象</span></span><br><span class="line">    Class cls1 = Class.forName(<span class="string">"com.ReflectDemo.Domain.Person"</span>);</span><br><span class="line">    System.out.println(cls1);</span><br><span class="line"></span><br><span class="line">   	<span class="comment">//类名.class. #通过类名的属性class 获取</span></span><br><span class="line">    Class cls2 = Person.class;</span><br><span class="line">    System.out.println(cls2);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//对象.getClass()  #这个getClass()是在Object类中，返回此 `Object`的运行时类</span></span><br><span class="line">    Person p = <span class="keyword">new</span> Person();</span><br><span class="line">    Class cls3= p.getClass();</span><br><span class="line">    System.out.println(cls3 );</span><br><span class="line"></span><br><span class="line">    <span class="comment">//比较三个值是否相等</span></span><br><span class="line">    System.out.println(cls1 == cls2);</span><br><span class="line">    System.out.println(cls1 == cls3);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/Users/onekingcc/blog/onekingcc/source/images/image-20210902143239987.png" alt="image-20210902143239987"></p>
+<p>然后这里都输出了我想要获取的Class 对象，而且这里获取到的对象是相等的，说明这三个不同的引用，指向的是堆内存中同一个对象。也就是说同一个字节码在运行过程中只会被加载一次不管通过哪种方式去获取Class对象都是同一个。</p>
+<h4 id="获取成员变量"><a href="#获取成员变量" class="headerlink" title="获取成员变量"></a>获取成员变量</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Field			<span class="title">getField</span><span class="params">(String name)</span>  </span></span><br><span class="line"><span class="function">Field[] 	<span class="title">getFields</span><span class="params">()</span></span></span><br><span class="line"><span class="function">Field[] fields </span>= Personclazz.getFields();</span><br><span class="line">Field[] declaredFields= Personclazz.getDeclaredFields()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取类中的字节对象</span></span><br><span class="line">    Class Personclazz = Person.class;</span><br><span class="line">    <span class="comment">// 获取成员变量</span></span><br><span class="line">    Field[] fields = Personclazz.getFields();</span><br><span class="line">    <span class="comment">//遍历</span></span><br><span class="line">   <span class="comment">/** for(Field field:fields) &#123;</span></span><br><span class="line"><span class="comment">    * System.out.println(field);</span></span><br><span class="line"><span class="comment">        &#125;</span></span><br><span class="line"><span class="comment">    **/</span></span><br><span class="line">   <span class="comment">// Field	getField(String name)</span></span><br><span class="line">    Field a = Personclazz.getField(<span class="string">"a"</span>);</span><br><span class="line">    <span class="comment">//System.out.println(a);</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取成员变量的值</span></span><br><span class="line">    Person b = <span class="keyword">new</span> Person();</span><br><span class="line">    Object result = a.get(b);</span><br><span class="line">    System.out.println(result);</span><br><span class="line">    <span class="comment">//设置成员变量值</span></span><br><span class="line">    a.set(b,<span class="string">"test"</span>);</span><br><span class="line">    System.out.println(b);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/Users/onekingcc/blog/onekingcc/source/images/image-20210906103508256.png" alt="image-20210906103508256"></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object obj = field.get(类实例对象); #获取成员变量值：</span><br><span class="line">field.set(类实例对象, 修改后的值);#设置成员变量值：</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Field			<span class="title">getDeclaredField</span><span class="params">(String name)</span></span></span><br><span class="line"><span class="function">Field[]		<span class="title">getDeclaredFields</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Field[]	getDeclaredFields()</span></span><br><span class="line">   Field[] declaredFields= Personclazz.getDeclaredFields()</span><br><span class="line">   <span class="comment">//Field		getDeclaredField(String name)</span></span><br><span class="line">   Field age = Personclazz.getDeclaredField(<span class="string">"age"</span>);</span><br><span class="line">   age.setAccessible(<span class="keyword">true</span>); 		<span class="comment">// 设置age修改权限</span></span><br><span class="line">   Object result2 =  age.get(b);</span><br><span class="line">   System.out.println(result2);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/Users/onekingcc/blog/onekingcc/source/images/image-20210906111056814.png" alt="image-20210906111056814"></p>
+<p>获取类中的成员方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Method	<span class="title">getMethod</span><span class="params">(String name, Class&lt;?&gt;... parameterTypes)</span></span></span><br><span class="line"><span class="function">Method[]	<span class="title">getMethods</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">Method	<span class="title">getDeclaredMethod</span><span class="params">(String name, Class&lt;?&gt;... parameterTypes)</span> #在Class类中提供的getDeclaredMethod方法上接收一个String name，name表示的是需要反射的那个方法的名字，如果出现了方法重载，还需要指定方法参数类型。还有一点就是不带Declare只能获取公共的属性</span></span><br><span class="line"><span class="function">Method[]	<span class="title">getDeclaredMethods</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+
+<p>反射调用方法</p>
+<p>获取到<code>java.lang.reflect.Method</code>对象以后可以通过<code>Method</code>类中的<code>invoke</code>方法来调用类方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">method.invoke(方法实例对象, 方法参数值，多个参数值用<span class="string">","</span>隔开);</span><br></pre></td></tr></table></figure>
+
+<p><code>method.invoke</code>的第一个参数必须是类实例对象，如果调用的是<code>static</code>方法那么第一个参数值可以传<code>null</code>，因为在java中调用静态方法是不需要有类实例的，因为可以直接<code>类名.方法名(参数)</code>的方式调用。</p>
+<h4 id="获取构造方法"><a href="#获取构造方法" class="headerlink" title="获取构造方法"></a>获取构造方法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Constructor&lt;T&gt;	  <span class="title">getConstructor</span><span class="params">()</span></span></span><br><span class="line"><span class="function">Constructor&lt;?&gt;[]	  <span class="title">getConstructors</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span></span><br><span class="line"><span class="function">Constructor&lt;T&gt;	<span class="title">getDeclaredConstructor</span><span class="params">()</span></span></span><br><span class="line"><span class="function">Constructor&lt;?&gt;[]	<span class="title">getDeclaredConstructors</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Constructor cons1 = PersonClass.getConstructor(String.class, <span class="keyword">int</span>.class);</span><br><span class="line">   <span class="comment">//创建对象</span></span><br><span class="line">   Object obj = cons1.newInstance(<span class="string">"jon"</span>,<span class="number">18</span>);</span><br></pre></td></tr></table></figure>
+
+<p>获取到了对应的方法之后，需要找到里面能够创建的，直接去手册里面查Constructor 在java.lang.reflect 包下存在一个newInstance()的方法，专门使用指定的初始化参数来创建和初始化构造函数的声明类的新实例。这里就相当于Person字节码文件对应Person class对象，创建一个Person对象</p>
+<h4 id="反射获取成员方法"><a href="#反射获取成员方法" class="headerlink" title="反射获取成员方法"></a>反射获取成员方法</h4><p>获取当前类所有的成员方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Method[] methods = Personclazz.getDeclaredMethods()</span><br></pre></td></tr></table></figure>
+
+<p>获取当前类指定的成员方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Method method = clazz.getDeclaredMethod(<span class="string">"方法名"</span>);</span><br><span class="line">Method method = clazz.getDeclaredMethod(<span class="string">"方法名"</span>, 参数类型如String.class，多个参数用<span class="string">","</span>号隔开);</span><br></pre></td></tr></table></figure>
+
+<p>调用类方法代码片段</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">method.invoke(方法实例对象, 方法参数值，多个参数值用<span class="string">","</span>隔开);</span><br></pre></td></tr></table></figure>
+
+<p>参考文章：</p>
+<p><a href="https://blog.csdn.net/u011442726/article/details/99060961" target="_blank" rel="noopener">https://blog.csdn.net/u011442726/article/details/99060961</a></p>
+<p><a href="https://zhishihezi.net/endpoint/richtext/e42860059e942a37aa7e103281460048?event=436b34f44b9f95fd3aa8667f1ad451b173526ab5441d9f64bd62d183bed109b0ea1aaaa23c5207a446fa6de9f588db3958e8cd5c825d7d5216199d64338d9d00bc8c2e7f5b6c28707f178fc040afc7be36c8fea86288ac90e120fa02c54d3a9ba6732ab49a0d8ce5c5ddcc56fba662a9401be56eb830ad2fd0f9f86e26d2c70171ff29aa589e1086374bbf2a786255e84edb5122fd842f1251874f12c962907e29de901ed319175ccf2b703e912e82dc87166901ef5accca83a6848aa3337ea24635fcf3205aeab0ded9d8f11cff9cc64ee26e3639321c4ef7000b2de0913873c1f7ceae1e3b976c192f4d0cc20910099ac619ee5272133629a622fa056c46c1#0" target="_blank" rel="noopener">https://zhishihezi.net/endpoint/richtext/e42860059e942a37aa7e103281460048?event=436b34f44b9f95fd3aa8667f1ad451b173526ab5441d9f64bd62d183bed109b0ea1aaaa23c5207a446fa6de9f588db3958e8cd5c825d7d5216199d64338d9d00bc8c2e7f5b6c28707f178fc040afc7be36c8fea86288ac90e120fa02c54d3a9ba6732ab49a0d8ce5c5ddcc56fba662a9401be56eb830ad2fd0f9f86e26d2c70171ff29aa589e1086374bbf2a786255e84edb5122fd842f1251874f12c962907e29de901ed319175ccf2b703e912e82dc87166901ef5accca83a6848aa3337ea24635fcf3205aeab0ded9d8f11cff9cc64ee26e3639321c4ef7000b2de0913873c1f7ceae1e3b976c192f4d0cc20910099ac619ee5272133629a622fa056c46c1#0</a></p>
+<p><a href="https://xz.aliyun.com/t/136" target="_blank" rel="noopener">https://xz.aliyun.com/t/136</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/friends/">Friends</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#java在计算机运行的三个阶段"><span class="toc-number">1.</span> <span class="toc-text">java在计算机运行的三个阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类的加载机制"><span class="toc-number">2.</span> <span class="toc-text">类的加载机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#java的反射机制"><span class="toc-number">3.</span> <span class="toc-text">java的反射机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#反射获取Class对象"><span class="toc-number">3.1.</span> <span class="toc-text">反射获取Class对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取成员变量"><span class="toc-number">3.2.</span> <span class="toc-text">获取成员变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取构造方法"><span class="toc-number">3.3.</span> <span class="toc-text">获取构造方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#反射获取成员方法"><span class="toc-number">3.4.</span> <span class="toc-text">反射获取成员方法</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&text=java基础学习-java反射"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&title=java基础学习-java反射"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&is_video=false&description=java基础学习-java反射"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=java基础学习-java反射&body=Check out this article: http://onekingcc.github.io/2020/07/11/java基础学习-java反射/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&title=java基础学习-java反射"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&title=java基础学习-java反射"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&title=java基础学习-java反射"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&title=java基础学习-java反射"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://onekingcc.github.io/2020/07/11/java基础学习-java反射/&name=java基础学习-java反射&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick='$("#toc-footer").toggle();return false;'><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick='$("#share-footer").toggle();return false;'><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick='$("#nav-footer").toggle();return false;'><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 onekingcc
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/friends/">Friends</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+
